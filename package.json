@@ -1,5 +1,44 @@
 {
   "name": "@uzkk/quiz",
-  "version": "1.0.0-alpha.0",
-  "license": "MIT"
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "author": "Shigma <1700011071@pku.edu.cn>",
+  "license": "MIT",
+  "files": [
+    "lib",
+    "tsconfig.json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uzkk/quiz.git"
+  },
+  "bugs": {
+    "url": "https://github.com/uzkk/quiz/issues"
+  },
+  "homepage": "https://vp.uzkk.net/quiz/",
+  "scripts": {
+    "build": "vuepress build docs",
+    "dev": "vuepress dev docs",
+    "serve": "vuepress serve docs",
+    "lint": "eslint . --fix"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^5.2.2",
+    "vuepress": "^1.0.0-alpha.46",
+    "vuepress-theme-uzkk": "^1.0.0-alpha.10"
+  },
+  "dependencies": {
+    "js-yaml-loader": "^1.0.1",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.4.1"
+  },
+  "peerDependencies": {
+    "vuepress": "^1.0.0-alpha.46"
+  }
 }
