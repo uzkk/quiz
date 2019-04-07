@@ -8,11 +8,14 @@
           <label>{{ lv }}</label>
         </span>
       </div>
+      <div class="tac">
+        <Checkbox v-model="doujin" label="包括二设题" />
+      </div>
     </div>
     <div class="start-btn-container tac">
       <Button
         class="start-btn"
-        @click="$emit('next', 'Select', { level })"
+        @click="$emit('next', 'Select', { level, doujin })"
       >
         开始
       </Button>
@@ -23,12 +26,14 @@
 <script>
 
 import Button from './Button'
+import Checkbox from './Checkbox'
 
 export default {
-  components: { Button },
+  components: { Button, Checkbox },
 
   data: () => ({
-    level: 'Easy'
+    level: 'Easy',
+    doujin: true
   }),
 
   created () {

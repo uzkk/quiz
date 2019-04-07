@@ -53,7 +53,7 @@ export default {
 
   components: { Button },
 
-  props: ['level'],
+  props: ['level', 'doujin'],
 
   data () {
     return {
@@ -69,7 +69,11 @@ export default {
 
   created () {
     const all_levels = { Easy, Normal, Hard, Lunatic }
-    this.questions = this.shuffle(all_levels[this.level])
+    this.questions = all_levels[this.level].slice()
+    if (!this.doujin) {
+      this.questions = this.questions.filter(q => !q[3])
+    }
+    this.shuffle(this.questions)
     this.setQuestion(0)
   },
 
@@ -81,7 +85,6 @@ export default {
         list[i] = list[j]
         list[j] = tmp
       }
-      return list
     },
     setQuestion (index) {
       this.currentQuestion = this.questions[index].slice()
