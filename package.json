@@ -30,15 +30,11 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^5.2.2",
-    "vuepress": "^1.0.0-alpha.46",
+    "vuepress": "^1.0.0-alpha.47",
     "vuepress-theme-uzkk": "^1.0.0-alpha.10"
   },
   "dependencies": {
     "js-yaml-loader": "^1.0.1",
-    "ts-loader": "^5.3.3",
     "typescript": "^3.4.1"
-  },
-  "peerDependencies": {
-    "vuepress": "^1.0.0-alpha.46"
   }
 }
