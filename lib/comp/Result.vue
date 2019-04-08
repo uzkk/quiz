@@ -61,6 +61,12 @@
       >
         返回主界面
       </Button>
+      <Button
+        class="res-page-back-btn"
+        @click="$router.push(UZKK_QUIZ_BASE + 'about.html')"
+      >
+        关于知识测试
+      </Button>
     </div>
   </div>
 </template>
