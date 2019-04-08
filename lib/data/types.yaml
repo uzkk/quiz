@@ -1,27 +1,29 @@
 first:
   - tag: a
-    name: 设定相关
+    name: 剧情与设定
   - tag: b
-    name: 音乐相关
+    name: 原作音乐
   - tag: c
-    name: 立绘相关
+    name: 原作立绘
   - tag: d
     name: STG 相关
   - tag: e
     name: FTG 相关
   - tag: f
-    name: 旧作相关
+    name: 外传相关
   - tag: g
-    name: 外传作品相关
+    name: 旧作相关
 
 others:
   - tag: A
-    name: 动漫相关
+    name: 同人动画
   - tag: B
-    name: 音乐相关
+    name: 同人音乐
   - tag: C
-    name: 游戏相关
+    name: 同人游戏
   - tag: D
-    name: 考据相关
+    name: 同人手书
+  - tag: E
+    name: 零设考据
   - tag: Z
     name: 其他
