@@ -62,8 +62,8 @@
 
 <script>
 
-import Button from './Button'
-import CollapseView from './CollapseView'
+import Button from '@theme-uzkk/components/Button'
+import CollapseView from '@theme-uzkk/components/CollapseView'
 
 export default {
   name: 'Result',
@@ -78,7 +78,7 @@ export default {
     'questions',
     'shuffledQuestions',
     'correctNum',
-    'wrongIds'
+    'wrongIds',
   ],
 
   methods: {

@@ -28,7 +28,7 @@
 
 <script>
 
-import Button from './Button'
+import Button from '@theme-uzkk/components/Button'
 import Easy from '../data/easy'
 import Normal from '../data/normal'
 import Hard from '../data/hard'
@@ -45,13 +45,13 @@ export default {
     return {
       shuffledQuestions: [],
       questionCount: 1,
-      currentQuestion: undefined
+      currentQuestion: undefined,
     }
   },
 
   created () {
-    const all_levels = { Easy, Normal, Hard, Lunatic }
-    this.questions = all_levels[this.level].filter(q => {
+    const levels = { Easy, Normal, Hard, Lunatic }
+    this.questions = levels[this.level].filter(q => {
       return this.typelist.includes(q[3])
     })
     this.shuffle(this.questions)
@@ -105,13 +105,13 @@ export default {
           questions: this.questions,
           shuffledQuestions: this.shuffledQuestions,
           correctNum: this.correctNum,
-          wrongIds: this.wrongIds
+          wrongIds: this.wrongIds,
         })
       } else {
         this.setQuestion(this.questionCount - 1)
       }
-    }
-  }
+    },
+  },
 }
 
 </script>

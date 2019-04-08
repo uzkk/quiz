@@ -57,8 +57,8 @@
 
 <script>
 
-import Button from './Button'
-import Checkbox from './Checkbox'
+import Button from '@theme-uzkk/components/Button'
+import Checkbox from '@theme-uzkk/components/Checkbox'
 import types from '../data/types'
 
 export default {
@@ -66,7 +66,7 @@ export default {
 
   data: () => ({
     level: 'Easy',
-    typelist: 'abcdef'
+    typelist: 'abcdef',
   }),
 
   created () {
