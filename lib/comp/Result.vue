@@ -84,7 +84,7 @@ export default {
     'shuffledQuestions',
     'correctNum',
     'wrongIds',
-    'answers'
+    'answers',
   ],
 
   methods: {

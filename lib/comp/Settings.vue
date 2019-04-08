@@ -2,12 +2,16 @@
   <div>
     <div class="option-container">
       <p class="title">
-        <Checkbox v-model="allSelected" label="所有题目"/>
+        <Checkbox v-model="allSelected">
+          所有题目 ({{ getTestCount('abcdefgABCDEZ') }})
+        </Checkbox>
       </p>
       <ul>
         <li>
           <p>
-            <Checkbox v-model="allFirstSelected" label="一设"/>
+            <Checkbox v-model="allFirstSelected">
+              一设 ({{ getTestCount('abcdefg') }})
+            </Checkbox>
           </p>
           <ul>
             <li class="sub-item" v-for="(type, index) in types.first" :key="index">
@@ -15,13 +19,17 @@
                 :value="typelist.includes(type.tag)"
                 :label="type.name"
                 @update="toggleType(type.tag)"
-              />
+              >
+                {{ type.name }} ({{ getTestCount(type.tag) }})
+              </Checkbox>
             </li>
           </ul>
         </li>
         <li>
           <p>
-            <Checkbox v-model="allOthersSelected" label="二设 / 考据"/>
+            <Checkbox v-model="allOthersSelected">
+              二设 / 考据 ({{ getTestCount('ABCDEZ') }})
+            </Checkbox>
           </p>
           <ul>
             <li class="sub-item" v-for="(type, index) in types.others" :key="index">
@@ -29,7 +37,9 @@
                 :value="typelist.includes(type.tag)"
                 :label="type.name"
                 @update="toggleType(type.tag)"
-              />
+              >
+                {{ type.name }} ({{ getTestCount(type.tag) }})
+              </Checkbox>
             </li>
           </ul>
         </li>
@@ -40,7 +50,7 @@
         选择难度：
         <span class="choice-item opt-item" v-for="(lv, index) in levels" :key="index">
           <input type="radio" :value="lv" v-model="level">
-          <label>{{ lv }}</label>
+          <label>{{ lv }} ({{ getTestCount('abcdefgABCDEZ', lv) }})</label>
         </span>
       </div>
     </div>
@@ -48,9 +58,9 @@
       <Button
         class="start-btn"
         @click="$emit('next', 'Select', { level, typelist })"
-        :disabled="!typelist.length"
+        :disabled="!currentTestCount"
       >
-        开始
+        开始 ({{ currentTestCount }})
       </Button>
     </div>
   </div>
@@ -60,7 +70,7 @@
 
 import Button from '@theme-uzkk/components/Button'
 import Checkbox from '@theme-uzkk/components/Checkbox'
-import types from '../data/types'
+import { levels, types } from '../data'
 
 export default {
   components: { Button, Checkbox },
@@ -115,6 +125,9 @@ export default {
         this.typelist = (value ? this.others : '') + first
       },
     },
+    currentTestCount () {
+      return this.getTestCount(this.typelist)
+    },
   },
 
   methods: {
@@ -128,6 +141,9 @@ export default {
         chars.push(tag)
         this.typelist = chars.sort().join('')
       }
+    },
+    getTestCount (typelist, level = this.level) {
+      return levels[level].filter(t => typelist.includes(t[3])).length
     },
   },
 }
@@ -154,7 +170,7 @@ export default {
 
 .opt-item
   display inline-block
-  width 6em
+  width 11em
 
 .start-btn-container
   margin 1.8em auto
@@ -177,6 +193,6 @@ li
 
 li.sub-item
   display inline-block
-  width 9em
+  width 10em
 
 </style>

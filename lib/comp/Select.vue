@@ -29,14 +29,9 @@
 <script>
 
 import Button from '@theme-uzkk/components/Button'
-import Easy from '../data/easy'
-import Normal from '../data/normal'
-import Hard from '../data/hard'
-import Lunatic from '../data/lunatic'
+import { levels } from '../data'
 
 export default {
-  name: 'Select',
-
   components: { Button },
 
   props: ['level', 'typelist'],
@@ -50,7 +45,6 @@ export default {
   },
 
   created () {
-    const levels = { Easy, Normal, Hard, Lunatic }
     this.questions = levels[this.level].filter(q => {
       return this.typelist.includes(q[3])
     })
@@ -106,7 +100,7 @@ export default {
           shuffledQuestions: this.shuffledQuestions,
           correctNum: this.correctNum,
           wrongIds: this.wrongIds,
-          answers: this.answers
+          answers: this.answers,
         })
       } else {
         this.setQuestion(this.questionCount - 1)
