@@ -3,14 +3,14 @@
     <div class="option-container">
       <p class="title">
         <Checkbox v-model="allSelected">
-          所有题目 ({{ getTestCount('abcdefgABCDEZ') }})
+          所有题目 ({{ getQuestionCount('abcdefgABCDEZ') }})
         </Checkbox>
       </p>
       <ul>
         <li>
           <p>
             <Checkbox v-model="allFirstSelected">
-              一设 ({{ getTestCount('abcdefg') }})
+              一设 ({{ getQuestionCount('abcdefg') }})
             </Checkbox>
           </p>
           <ul>
@@ -20,7 +20,7 @@
                 :label="type.name"
                 @update="toggleType(type.tag)"
               >
-                {{ type.name }} ({{ getTestCount(type.tag) }})
+                {{ type.name }} ({{ getQuestionCount(type.tag) }})
               </Checkbox>
             </li>
           </ul>
@@ -28,7 +28,7 @@
         <li>
           <p>
             <Checkbox v-model="allOthersSelected">
-              二设 / 考据 ({{ getTestCount('ABCDEZ') }})
+              二设 / 考据 ({{ getQuestionCount('ABCDEZ') }})
             </Checkbox>
           </p>
           <ul>
@@ -38,7 +38,7 @@
                 :label="type.name"
                 @update="toggleType(type.tag)"
               >
-                {{ type.name }} ({{ getTestCount(type.tag) }})
+                {{ type.name }} ({{ getQuestionCount(type.tag) }})
               </Checkbox>
             </li>
           </ul>
@@ -50,7 +50,7 @@
         选择难度：
         <span class="choice-item opt-item" v-for="(lv, index) in levels" :key="index">
           <input type="radio" :value="lv" v-model="level">
-          <label>{{ lv }} ({{ getTestCount('abcdefgABCDEZ', lv) }})</label>
+          <label>{{ lv }} ({{ getQuestionCount('abcdefgABCDEZ', lv) }})</label>
         </span>
       </div>
     </div>
@@ -58,9 +58,9 @@
       <Button
         class="start-btn"
         @click="$emit('next', 'Select', { level, typelist })"
-        :disabled="!currentTestCount"
+        :disabled="!currentQuestionCount"
       >
-        开始 ({{ currentTestCount }})
+        开始 ({{ currentQuestionCount }})
       </Button>
     </div>
   </div>
@@ -125,8 +125,8 @@ export default {
         this.typelist = (value ? this.others : '') + first
       },
     },
-    currentTestCount () {
-      return this.getTestCount(this.typelist)
+    currentQuestionCount () {
+      return this.getQuestionCount(this.typelist)
     },
   },
 
@@ -142,7 +142,7 @@ export default {
         this.typelist = chars.sort().join('')
       }
     },
-    getTestCount (typelist, level = this.level) {
+    getQuestionCount (typelist, level = this.level) {
       return levels[level].filter(t => typelist.includes(t[3])).length
     },
   },

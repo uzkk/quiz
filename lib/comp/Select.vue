@@ -1,7 +1,10 @@
 <template>
-  <div>
-    <h4 class="tac">
+  <div class="main-div">
+    <h3 class="tac">
       第 {{ questionCount }}/{{ shuffledQuestions.length }} 题
+    </h3>
+    <h4 class="tac">
+      分类：{{ level }} / {{ category[currentQuestion[3]] }}
     </h4>
     <div class="question tac">
       <h3>{{ currentQuestion[0] }}</h3>
@@ -10,7 +13,7 @@
           class="choice-btn"
           @click="nextQuestion(index)"
         >
-          {{ String.fromCharCode(index + 65) }} {{ choice }}
+          {{ String.fromCharCode(index + 65) }}. {{ choice }}
         </Button>
       </div>
     </div>
@@ -29,7 +32,7 @@
 <script>
 
 import Button from '@theme-uzkk/components/Button'
-import { levels } from '../data'
+import { levels, category } from '../data'
 
 export default {
   components: { Button },
@@ -45,6 +48,7 @@ export default {
   },
 
   created () {
+    this.category = category
     this.questions = levels[this.level].filter(q => {
       return this.typelist.includes(q[3])
     })
@@ -118,7 +122,7 @@ export default {
 
 .choice-btn-container
   margin 0.5em auto
-  width 20%
+  width 30%
 
 .choice-btn
   width 100%
@@ -154,7 +158,7 @@ export default {
   margin 0.7em auto
 
 .back-btn-container
-  margin 1.8em auto
+  margin 1.8em auto 0
   width 30%
 
 .back-btn
