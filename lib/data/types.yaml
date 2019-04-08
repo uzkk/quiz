@@ -10,7 +10,9 @@ first:
   - tag: e
     name: FTG 相关
   - tag: f
-    name: 其他
+    name: 旧作相关
+  - tag: g
+    name: 外传作品相关
 
 others:
   - tag: A
@@ -21,5 +23,5 @@ others:
     name: 游戏相关
   - tag: D
     name: 考据相关
-  - tag: E
+  - tag: Z
     name: 其他

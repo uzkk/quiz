@@ -66,14 +66,14 @@ export default {
 
   data: () => ({
     level: 'Easy',
-    typelist: 'abcdef',
+    typelist: 'abcdeg',
   }),
 
   created () {
     this.levels = ['Easy', 'Normal', 'Hard', 'Lunatic']
     this.types = types
-    this.first = 'abcdef'
-    this.others = 'ABCDE'
+    this.first = 'abcdefg'
+    this.others = 'ABCDZ'
     this.all = this.others + this.first
   },
 
