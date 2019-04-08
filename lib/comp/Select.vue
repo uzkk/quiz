@@ -1,30 +1,16 @@
 <template>
   <div>
     <h4 class="tac">
-      第 {{ questionCount }}/{{ questions.length }} 题
+      第 {{ questionCount }}/{{ shuffledQuestions.length }} 题
     </h4>
     <div class="question tac">
       <h3>{{ currentQuestion[0] }}</h3>
-      <div class="choice-btn-container" v-for="(choice, index) in shuffledOptions" :key="index">
+      <div class="choice-btn-container" v-for="(choice, index) in currentQuestion[1]" :key="index">
         <Button
           class="choice-btn"
-          @click="choose(choice)"
-          :disabled="answered"
+          @click="nextQuestion(index)"
         >
           {{ String.fromCharCode(index + 65) }} {{ choice }}
-        </Button>
-      </div>
-    </div>
-    <div class="judge tac" v-if="answered">
-      <h3 class="correct-hint" v-if="correct">回答正确</h3>
-      <h3 class="incorrect-hint" v-else>回答错误</h3>
-      本题的正确答案为：<span class="correct-answer">{{ String.fromCharCode(shuffledOptions.indexOf(currentQuestion[1][0]) + 65) }} {{ currentQuestion[1][0] }}</span>
-      <div class="next-btn-container">
-        <Button
-          class="next-btn"
-          @click="nextQuestion"
-        >
-          下一题
         </Button>
       </div>
     </div>
@@ -53,28 +39,39 @@ export default {
 
   components: { Button },
 
-  props: ['level', 'doujin'],
+  props: ['level', 'typelist'],
 
   data () {
     return {
-      questions: [],
+      shuffledQuestions: [],
       questionCount: 1,
-      currentQuestion: undefined,
-      shuffledOptions: undefined,
-      answered: false,
-      correct: false,
-      correctNum: 0
+      currentQuestion: undefined
     }
   },
 
   created () {
     const all_levels = { Easy, Normal, Hard, Lunatic }
-    this.questions = all_levels[this.level].slice()
-    if (!this.doujin) {
-      this.questions = this.questions.filter(q => !q[3])
-    }
+    this.questions = all_levels[this.level].filter(q => {
+      return this.typelist.includes(q[3])
+    })
     this.shuffle(this.questions)
+    for (let question of this.questions) {
+      let _question = []
+      for (let item of question) {
+        let _item
+        if (item instanceof Array) {
+          _item = item.slice()
+        } else {
+          _item = item
+        }
+        _question.push(_item)
+      }
+      this.shuffledQuestions.push(_question)
+    }
     this.setQuestion(0)
+    this.answers = []
+    this.correctNum = 0
+    this.wrongIds = []
   },
 
   methods: {
@@ -87,30 +84,28 @@ export default {
       }
     },
     setQuestion (index) {
-      this.currentQuestion = this.questions[index].slice()
-      this.shuffledOptions = this.currentQuestion[1].slice()
-      this.shuffle(this.shuffledOptions)
+      this.currentQuestion = this.shuffledQuestions[index]
+      this.shuffle(this.currentQuestion[1])
     },
     backToSettings () {
       this.$emit('next', 'Settings')
     },
-    choose (choice) {
-      this.answered = true
-      if (choice === this.currentQuestion[1][0]) {
-        this.correct = true
+    nextQuestion (index) {
+      this.answers.push(index)
+      let choice = this.currentQuestion[1][index]
+      if (choice === this.questions[this.questionCount - 1][1][0]) {
         this.correctNum += 1
       } else {
-        this.correct = false
+        this.wrongIds.push(this.questionCount - 1)
       }
-    },
-    nextQuestion () {
       this.questionCount += 1
-      this.answered = false
       if (this.questionCount > this.questions.length) {
         this.$emit('next', 'Result', {
           level: this.level,
+          questions: this.questions,
+          shuffledQuestions: this.shuffledQuestions,
           correctNum: this.correctNum,
-          totalNum: this.questionCount - 1
+          wrongIds: this.wrongIds
         })
       } else {
         this.setQuestion(this.questionCount - 1)

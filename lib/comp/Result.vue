@@ -1,7 +1,52 @@
 <template>
   <div>
     <h3 class="tac">恭喜您完成 {{ level }} 难度测试！</h3>
-    <h2 class="tac">您的正确率：{{ correctNum }}/{{ totalNum }}</h2>
+    <h2 class="tac">您的正确率：{{ correctNum }}/{{ questions.length }}</h2>
+    <div class="back-btn-container tac">
+      <Button
+        class="res-page-back-btn"
+        title="返回主界面"
+        type="warning"
+        @click="backToSettings"
+      >
+        返回主界面
+      </Button>
+    </div>
+    <div class="answer-results">
+      <div
+        class="question-result"
+        v-for="(question, qid) in shuffledQuestions"
+        :key="qid"
+      >
+        <h3 class="tac">{{ question[0] }}</h3>
+        <ul class="choices">
+          <li
+            class="choice"
+            v-for="(choice, cid) in question[1]"
+            :key="cid"
+          >
+            {{ String.fromCharCode(cid + 65) }} {{ choice }}
+          </li>
+        </ul>
+        <div class="tac">
+          正确答案：
+          <span class="correct">
+            {{ String.fromCharCode(question[1].indexOf(questions[qid][1][0]) + 65) }}
+          </span>
+          您的答案：
+          <span :class="wrongIds.includes(qid) ? 'incorrect' : 'correct'">
+            {{ String.fromCharCode(answers[qid] + 65) }}
+          </span>
+        </div>
+        <CollapseView
+          class="explanation container"
+          :initial="wrongIds.includes(qid) ? 'open' : 'close'"
+        >
+          <h3>解析：</h3>
+          {{ question[2] }}
+        </CollapseView>
+      </div>
+    </div>
     <div class="back-btn-container tac">
       <Button
         class="res-page-back-btn"
@@ -18,15 +63,23 @@
 <script>
 
 import Button from './Button'
+import CollapseView from './CollapseView'
 
 export default {
   name: 'Result',
 
   components: {
     Button,
+    CollapseView,
   },
 
-  props: ['level', 'correctNum', 'totalNum'],
+  props: [
+    'level',
+    'questions',
+    'shuffledQuestions',
+    'correctNum',
+    'wrongIds'
+  ],
 
   methods: {
     backToSettings () {
@@ -42,9 +95,6 @@ export default {
 .tac
   text-align center
 
-.row
-  margin 1rem 0
-
 .back-btn-container
   width 30%
   margin 1.8em auto
@@ -54,11 +104,36 @@ export default {
   display block
   margin 0.8em 0
 
+.answer-results
+  margin 2em auto
+  padding 0.5em 1em
+  border-radius 1em
+  background-color #fff
+
+.question-result
+  margin-top 0.5em
+
+.choices
+  margin 0.3em auto
+
+  choice
+    margin 0.3em 0
+
+  > :first-child
+    margin-top 0
+
+  > :last-child
+    margin-bottom 0
+
+.correct
+  color #0c0
+
+.incorrect
+  color #c00
+
 .container
   margin 1em auto
   padding 2em
-  border-radius .5em
-  background-color #fff
   max-width 1080px
 
   > :first-child
@@ -69,20 +144,5 @@ export default {
 
   h3
     margin 0
-
-  table
-    max-width 100%
-    border-collapse collapse
-    margin 1.5rem auto 0
-    text-align center
-
-  tr
-    border-top 1px solid #dfe2e5
-    &:nth-child(2n)
-      background-color #f6f8fa
-
-  th, td
-    border 1px solid #dfe2e5
-    padding .6em 1em
 
 </style>
