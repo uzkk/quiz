@@ -2,15 +2,15 @@
   <div>
     <div class="option-container">
       <p class="title">
-        <Checkbox v-model="allSelected" label="所有题目全选"/>
+        <Checkbox v-model="allSelected" label="所有题目"/>
       </p>
       <ul>
         <li>
           <p>
-            <Checkbox v-model="allFirstSelected" label="一设题目全选"/>
+            <Checkbox v-model="allFirstSelected" label="一设"/>
           </p>
           <ul>
-            <li class="type-item" v-for="(type, index) in types.first" :key="index">
+            <li class="sub-item" v-for="(type, index) in types.first" :key="index">
               <Checkbox
                 :value="typelist.includes(type.tag)"
                 :label="type.name"
@@ -21,10 +21,10 @@
         </li>
         <li>
           <p>
-            <Checkbox v-model="allOthersSelected" label="二设·考据题目全选"/>
+            <Checkbox v-model="allOthersSelected" label="二设 / 考据"/>
           </p>
           <ul>
-            <li class="type-item" v-for="(type, index) in types.others" :key="index">
+            <li class="sub-item" v-for="(type, index) in types.others" :key="index">
               <Checkbox
                 :value="typelist.includes(type.tag)"
                 :label="type.name"
@@ -48,6 +48,7 @@
       <Button
         class="start-btn"
         @click="$emit('next', 'Select', { level, typelist })"
+        :disabled="!typelist.length"
       >
         开始
       </Button>
@@ -66,7 +67,7 @@ export default {
 
   data: () => ({
     level: 'Easy',
-    typelist: 'abcdeg',
+    typelist: 'abcdef',
   }),
 
   created () {
@@ -115,6 +116,20 @@ export default {
       },
     },
   },
+
+  methods: {
+    toggleType (tag) {
+      const index = this.typelist.indexOf(tag)
+      const chars = this.typelist.split('')
+      if (index > -1) {
+        chars.splice(index, 1)
+        this.typelist = chars.join('')
+      } else {
+        chars.push(tag)
+        this.typelist = chars.sort().join('')
+      }
+    },
+  },
 }
 
 </script>
@@ -149,5 +164,19 @@ export default {
   width 100%
   display block
   margin 0.8em 0
+
+p.title
+  font-weight bold
+
+ul
+  line-height 1.6
+  padding-inline-start 1.6em
+
+li
+  list-style-type none
+
+li.sub-item
+  display inline-block
+  width 9em
 
 </style>
