@@ -19,30 +19,35 @@
         :key="qid"
       >
         <h3 class="tac">{{ question[0] }}</h3>
-        <ul class="choices">
-          <li
-            class="choice"
-            v-for="(choice, cid) in question[1]"
-            :key="cid"
-          >
-            {{ String.fromCharCode(cid + 65) }} {{ choice }}
-          </li>
-        </ul>
+        <div class="choices">
+          <ul>
+            <li
+              class="choice"
+              v-for="(choice, cid) in question[1]"
+              :key="cid"
+            >
+              {{ String.fromCharCode(cid + 65) }} {{ choice }}
+            </li>
+          </ul>
+        </div>
         <div class="tac">
           正确答案：
           <span class="correct">
             {{ String.fromCharCode(question[1].indexOf(questions[qid][1][0]) + 65) }}
           </span>
+        </div>
+        <div class="tac">
           您的答案：
           <span :class="wrongIds.includes(qid) ? 'incorrect' : 'correct'">
             {{ String.fromCharCode(answers[qid] + 65) }}
           </span>
         </div>
         <CollapseView
-          class="explanation container"
+          class="explanation container tac"
+          :ref="`cv_${qid}`"
           :initial="wrongIds.includes(qid) ? 'open' : 'close'"
         >
-          <h3>解析：</h3>
+          <h3 slot="header">{{ $refs[`cv_${qid}`].isOpen ? '解析' : '点击查看解析' }}</h3>
           {{ question[2] }}
         </CollapseView>
       </div>
@@ -79,6 +84,7 @@ export default {
     'shuffledQuestions',
     'correctNum',
     'wrongIds',
+    'answers'
   ],
 
   methods: {
@@ -112,6 +118,7 @@ export default {
 
 .question-result
   margin-top 0.5em
+  border 1px
 
 .choices
   margin 0.3em auto

@@ -106,6 +106,7 @@ export default {
           shuffledQuestions: this.shuffledQuestions,
           correctNum: this.correctNum,
           wrongIds: this.wrongIds,
+          answers: this.answers
         })
       } else {
         this.setQuestion(this.questionCount - 1)

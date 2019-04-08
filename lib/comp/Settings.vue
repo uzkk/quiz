@@ -74,7 +74,7 @@ export default {
     this.levels = ['Easy', 'Normal', 'Hard', 'Lunatic']
     this.types = types
     this.first = 'abcdefg'
-    this.others = 'ABCDZ'
+    this.others = 'ABCDEZ'
     this.all = this.others + this.first
   },
 
