@@ -4,7 +4,7 @@
       第 {{ questionCount }}/{{ shuffledQuestions.length }} 题
     </h3>
     <h4 class="tac">
-      分类：{{ level }} / {{ getCategory(currentQuestion[3]) }}
+      分类：{{ level }} / {{ category[currentQuestion[3]] }}
     </h4>
     <div class="question tac">
       <h3>{{ currentQuestion[0] }}</h3>
@@ -48,6 +48,7 @@ export default {
   },
 
   created () {
+    this.category = category
     this.questions = levels[this.level].filter(q => {
       return this.typelist.includes(q[3])
     })
@@ -83,9 +84,6 @@ export default {
     setQuestion (index) {
       this.currentQuestion = this.shuffledQuestions[index]
       this.shuffle(this.currentQuestion[1])
-    },
-    getCategory (rawCategory) {
-      return category[rawCategory.charAt(0)] + rawCategory.slice(1)
     },
     backToSettings () {
       this.$emit('next', 'Settings')

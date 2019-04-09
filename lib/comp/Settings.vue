@@ -149,7 +149,7 @@ export default {
       }
     },
     getQuestionCount (typelist, level = this.level) {
-      return levels[level].filter(t => typelist.includes(t[3].charAt(0))).length
+      return levels[level].filter(t => typelist.includes(t[3])).length
     },
   },
 }
