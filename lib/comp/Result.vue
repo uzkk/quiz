@@ -44,10 +44,10 @@
         </div>
         <CollapseView
           class="explanation container tac"
-          :ref="`cv_${qid}`"
           :initial="wrongIds.includes(qid) ? 'open' : 'close'"
         >
-          <h3 slot="header">{{ $refs[`cv_${qid}`].isOpen ? '解析' : '点击查看解析' }}</h3>
+          <h3 slot="header-open">解析</h3>
+          <h3 slot="header-closed">点此查看解析</h3>
           {{ question[2] }}
         </CollapseView>
       </div>
@@ -142,7 +142,7 @@ export default {
   color #0c0
 
 .incorrect
-  color #c00
+  color #e00
 
 .container
   margin 1em auto
