@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="option-container">
+    <div class="section">
       <p class="title">
         <Checkbox v-model="allSelected">
           所有题目 ({{ getQuestionCount('abcdefgABCDEZ') }})
@@ -14,7 +14,7 @@
             </Checkbox>
           </p>
           <ul>
-            <li class="sub-item" v-for="(type, index) in types.first" :key="index">
+            <li class="inline medium" v-for="(type, index) in types.first" :key="index">
               <Checkbox
                 :value="typelist.includes(type.tag)"
                 :label="type.name"
@@ -32,7 +32,7 @@
             </Checkbox>
           </p>
           <ul>
-            <li class="sub-item" v-for="(type, index) in types.others" :key="index">
+            <li class="inline medium" v-for="(type, index) in types.others" :key="index">
               <Checkbox
                 :value="typelist.includes(type.tag)"
                 :label="type.name"
@@ -45,27 +45,28 @@
         </li>
       </ul>
     </div>
-    <div class="option-container">
-      <div class="tac">
-        选择难度：
-        <span class="choice-item opt-item" v-for="(lv, index) in levels" :key="index">
-          <input type="radio" :value="lv" v-model="level">
-          <label>{{ lv }} ({{ getQuestionCount('abcdefgABCDEZ', lv) }})</label>
-        </span>
-      </div>
+
+    <div class="section">
+      <p class="list">
+        <span>选择难度：</span>
+        <ul class="inline">
+          <li class="inline medium" v-for="(lv, index) in levels" :key="index">
+            <Radio :label="lv" v-model="level">
+              {{ lv }} ({{ getQuestionCount('abcdefgABCDEZ', lv) }})
+            </Radio>
+          </li>
+        </ul>
+      </p>
     </div>
-    <div class="start-btn-container tac">
+
+    <div class="button-container">
       <Button
-        class="start-btn"
         @click="$emit('next', 'Select', { level, typelist })"
         :disabled="!currentQuestionCount"
       >
         开始 ({{ currentQuestionCount }})
       </Button>
-      <Button
-        class="start-btn"
-        @click="$router.push(UZKK_QUIZ_BASE + 'about.html')"
-      >
+      <Button @click="$router.push(UZKK_QUIZ_BASE + 'about.html')">
         关于知识测试
       </Button>
     </div>
@@ -74,12 +75,13 @@
 
 <script>
 
+import Radio from '@theme-uzkk/components/Radio'
 import Button from '@theme-uzkk/components/Button'
 import Checkbox from '@theme-uzkk/components/Checkbox'
 import { levels, types } from '../data'
 
 export default {
-  components: { Button, Checkbox },
+  components: { Radio, Button, Checkbox },
 
   data: () => ({
     level: 'Easy',
@@ -155,50 +157,3 @@ export default {
 }
 
 </script>
-
-<style lang="stylus" scoped>
-
-.tac
-  text-align center
-
-.option-container
-  margin 1em auto
-  padding 2em
-  border-radius .5em
-  background-color #fff
-  max-width 1080px
-
-  > :first-child
-    margin-top 0
-
-  > :last-child
-    margin-bottom 0
-
-.opt-item
-  display inline-block
-  width 11em
-
-.start-btn-container
-  margin 1.8em auto
-  width 30%
-
-.start-btn
-  width 100%
-  display block
-  margin 0.8em 0
-
-p.title
-  font-weight bold
-
-ul
-  line-height 1.6
-  padding-inline-start 1.6em
-
-li
-  list-style-type none
-
-li.sub-item
-  display inline-block
-  width 10em
-
-</style>

@@ -4,3 +4,5 @@
 
 - 主站链接：[https://vp.uzkk.net/quiz/](https://vp.uzkk.net/quiz/)
 - 分站链接：[https://uzkk.github.io/quiz/](https://uzkk.github.io/quiz/)
+
+> 注：分站的更新会比主站快一两个版本。

@@ -17,12 +17,8 @@
         </Button>
       </div>
     </div>
-    <div class="back-btn-container tac">
-      <Button
-        class="back-btn"
-        type="warning"
-        @click="backToSettings"
-      >
+    <div class="button-container">
+      <Button type="warning" @click="backToSettings">
         返回主界面
       </Button>
     </div>

@@ -1,6 +1,6 @@
 <template>
   <FadeSlideTransition>
-    <component :is="phase" :key="phase" @next="updatePhase" v-bind="state"/>
+    <component class="quiz" :is="phase" :key="phase" @next="updatePhase" v-bind="state"/>
   </FadeSlideTransition>
 </template>
 
@@ -33,3 +33,5 @@ export default {
 }
 
 </script>
+
+<style lang="stylus" src="../styles/index.styl"></style>
