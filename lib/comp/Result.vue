@@ -18,37 +18,37 @@
         v-for="(question, qid) in shuffledQuestions"
         :key="qid"
       >
-        <h3 class="tac">{{ question[0] }}</h3>
+        <h2 class="tac">{{ question[0] }}</h2>
         <div class="choices">
-          <ul>
-            <li
-              class="choice"
-              v-for="(choice, cid) in question[1]"
-              :key="cid"
-            >
-              {{ String.fromCharCode(cid + 65) }} {{ choice }}
-            </li>
-          </ul>
+          <div
+            class="choice"
+            v-for="(choice, cid) in question[1]"
+            :key="cid"
+          >
+            <span class="choice-index">{{ String.fromCharCode(cid + 65) }}</span>&nbsp;&nbsp;{{ choice }}
+          </div>
         </div>
-        <div class="tac">
-          正确答案：
-          <span class="correct">
-            {{ String.fromCharCode(question[1].indexOf(questions[qid][1][0]) + 65) }}
-          </span>
-        </div>
-        <div class="tac">
-          您的答案：
-          <span :class="wrongIds.includes(qid) ? 'incorrect' : 'correct'">
-            {{ String.fromCharCode(answers[qid] + 65) }}
-          </span>
+        <div class="answer-compare">
+          <div class="tac">
+            正确答案：
+            <span class="correct">
+              {{ String.fromCharCode(question[1].indexOf(questions[qid][1][0]) + 65) }}
+            </span>
+          </div>
+          <div class="tac">
+            您的答案：
+            <span :class="wrongIds.includes(qid) ? 'incorrect' : 'correct'">
+              {{ String.fromCharCode(answers[qid] + 65) }}
+            </span>
+          </div>
         </div>
         <CollapseView
           class="explanation container tac"
           :initial="wrongIds.includes(qid) ? 'open' : 'close'"
         >
-          <h3 slot="header-open">解析</h3>
-          <h3 slot="header-closed">点此查看解析</h3>
-          {{ question[2] }}
+          <h3 class="opened-header" slot="header-open">收起解析</h3>
+          <h3 class="closed-header" slot="header-closed">查看解析</h3>
+          <p>{{ question[2] }}</p>
         </CollapseView>
       </div>
     </div>
@@ -123,14 +123,26 @@ export default {
   background-color #fff
 
 .question-result
-  margin-top 0.5em
-  border 1px
+  margin 2em 8em
+  border-width 1px
+  border-style dotted
+  border-radius 2em
+
+.answer-compare
+  margin-top 1em
 
 .choices
   margin 0.3em auto
 
-  choice
-    margin 0.3em 0
+  .choice
+    margin 0.6em auto
+    padding 0.3em 1.2em
+    border-radius 0.7em
+    background-color #eee
+    width 30%
+
+    .choice-index
+      font-weight bold
 
   > :first-child
     margin-top 0
@@ -145,9 +157,18 @@ export default {
   color #e00
 
 .container
-  margin 1em auto
+  margin 0 auto
   padding 2em
   max-width 1080px
+
+  .opened-header
+    color #55c
+
+  .closed-header
+    color #000
+
+    &:hover
+      color #55c
 
   > :first-child
     margin-top 0
@@ -157,5 +178,8 @@ export default {
 
   h3
     margin 0
+    padding 0.2em
+    background-color #eee
+    border-radius 0.5em
 
 </style>
