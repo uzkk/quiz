@@ -29,23 +29,21 @@
             {{ String.fromCharCode(question._answerIndex + 65) }}
           </div>
         </div>
-        <div class="cv-body">
-          <div class="tr question">
-            <span class="item">题目</span>
-            <span class="detail">{{ question[0] }}</span>
-          </div>
-          <div
-            class="tr"
-            v-for="(choice, cid) in question[1]"
-            :key="cid"
-          >
-            <span class="item">选项{{ String.fromCharCode(cid + 65) }}</span>
-            <span class="detail">{{ choice }}</span>
-          </div>
-          <div class="tr explanation-container">
-            <span class="item">解析</span>
-            <span class="detail explanation">{{ question[2] }}</span>
-          </div>
+        <div class="tr question">
+          <span class="item">题目</span>
+          <span class="detail">{{ question[0] }}</span>
+        </div>
+        <div
+          class="tr"
+          v-for="(choice, cid) in question[1]"
+          :key="cid"
+        >
+          <span class="item">选项{{ String.fromCharCode(cid + 65) }}</span>
+          <span class="detail">{{ choice }}</span>
+        </div>
+        <div class="tr">
+          <span class="item">解析</span>
+          <span class="detail explanation">{{ question[2] }}</span>
         </div>
       </CollapseView>
     </div>
@@ -157,8 +155,15 @@ export default {
   margin-top 0.5em
   line-height 1.5
   padding-right 1em
+
   @media (max-width $MQMobile)
     padding-right 0.5em
+
+  @media (min-width $MQMobile)
+    &:first-child
+      padding-top 0.5em
+    &:last-child
+      padding-bottom 0.5em
 
   &.question
     font-weight bold
