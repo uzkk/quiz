@@ -27,3 +27,11 @@ FTG 游戏相关信息。包括游戏机制和角色出场细节等信息。
 ### 旧作相关
 
 旧作相关信息。具有高优先级，一旦一道题与旧作相关，会被直接分到这一类。
+
+## 制作人员
+
+### 命题组
+
+<author-view name="echo"/>
+<author-view name="shigma"/>
+<author-view name="kouchya"/>
