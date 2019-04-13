@@ -2,7 +2,7 @@
   <div>
     <h3 class="tac">恭喜您完成 {{ level }} 难度测试！</h3>
     <h2 class="tac">您的正确率：{{ correctNum }}/{{ questions.length }}</h2>
-    <div class="back-btn-container tac">
+    <div class="button-container tac">
       <Button
         class="res-page-back-btn"
         title="返回主界面"
@@ -13,46 +13,50 @@
       </Button>
     </div>
     <div class="answer-results">
-      <div
-        class="question-result"
+      <div class="hint tac">点击题目查看选项及解析。</div>
+      <div class="table-header">
+        <div class="header-item qid">题号</div>
+        <div class="header-item header-question">题目</div>
+        <div class="header-item answer">您的答案</div>
+        <div class="header-item answer">正确答案</div>
+      </div>
+      <CollapseView
+        class="container"
         v-for="(question, qid) in shuffledQuestions"
         :key="qid"
+        :initial="wrongIds.includes(qid) ? 'open' : 'close'"
       >
-        <h2 class="tac">{{ question[0] }}</h2>
-        <div class="choices">
+        <div class="cv-header" slot="header">
+          <div class="header-item qid">{{ qid + 1 }}</div>
+          <div class="header-item header-question">{{ question[0] }}</div>
+          <div class="header-item answer answer-cont" :class="wrongIds.includes(qid) ? 'incorrect' : 'correct'">
+            {{ String.fromCharCode(answers[qid] + 65) }}
+          </div>
+          <div class="header-item answer answer-cont correct">
+            {{ String.fromCharCode(question[1].indexOf(questions[qid][1][0]) + 65) }}
+          </div>
+        </div>
+        <div class="cv-body">
+          <div class="body-question">
+            <div class="cv-body-item">题目</div>
+            <div class="cv-body-content">{{ question[0] }}</div>
+          </div>
           <div
-            class="choice"
+            class="choice-container"
             v-for="(choice, cid) in question[1]"
             :key="cid"
           >
-            <span class="choice-index">{{ String.fromCharCode(cid + 65) }}</span>&nbsp;&nbsp;{{ choice }}
+            <div class="cv-body-item">选项{{ String.fromCharCode(cid + 65) }}</div>
+            <div class="cv-body-content">{{ choice }}</div>
+          </div>
+          <div class="explanation-container">
+            <div class="cv-body-item">解析</div>
+            <div class="cv-body-content explanation">{{ question[2] }}</div>
           </div>
         </div>
-        <div class="answer-compare">
-          <div class="tac">
-            正确答案：
-            <span class="correct">
-              {{ String.fromCharCode(question[1].indexOf(questions[qid][1][0]) + 65) }}
-            </span>
-          </div>
-          <div class="tac">
-            您的答案：
-            <span :class="wrongIds.includes(qid) ? 'incorrect' : 'correct'">
-              {{ String.fromCharCode(answers[qid] + 65) }}
-            </span>
-          </div>
-        </div>
-        <CollapseView
-          class="explanation container tac"
-          :initial="wrongIds.includes(qid) ? 'open' : 'close'"
-        >
-          <h3 class="opened-header" slot="header-open">收起解析</h3>
-          <h3 class="closed-header" slot="header-closed">查看解析</h3>
-          <p>{{ question[2] }}</p>
-        </CollapseView>
-      </div>
+      </CollapseView>
     </div>
-    <div class="back-btn-container tac">
+    <div class="button-container tac">
       <Button
         class="res-page-back-btn"
         title="返回主界面"
@@ -107,10 +111,6 @@ export default {
 .tac
   text-align center
 
-.back-btn-container
-  width 30%
-  margin 1.8em auto
-
 .res-page-back-btn
   width 100%
   display block
@@ -118,37 +118,116 @@ export default {
 
 .answer-results
   margin 2em auto
-  padding 0.5em 1em
+  padding 0.5em 1em 1.5em
   border-radius 1em
   background-color #fff
 
-.question-result
-  margin 2em 8em
-  border-width 1px
-  border-style dotted
-  border-radius 2em
+.hint
+  margin 1em auto
+  color #aaa
+  font-style italic
 
-.answer-compare
-  margin-top 1em
+.table-header
+  @media (min-width 639px)
+    padding 0.5em 2em
+  @media (min-width 399px) and (max-width 639px)
+    padding 0.5em 1em
+  margin 0 auto
+  max-width 1080px
+  color #888
+  font-size 1.1em
+  font-weight bold
 
-.choices
-  margin 0.3em auto
+.cv-header
+  @media (max-width 399px)
+    padding 0.1em 0
+  @media (min-width 399px) and (max-width 639px)
+    padding 0.2em 0
+  @media (min-width 639px) and (max-width 899px)
+    padding 0.35em 0
+  @media (min-width 899px)
+    padding 0.5em 0
+  border-top 1px solid #ddd
+  border-bottom 1px solid #ddd
+  background-color #f7f7f7
 
-  .choice
-    margin 0.6em auto
-    padding 0.3em 1.2em
-    border-radius 0.7em
-    background-color #eee
-    width 30%
+.header-item
+  display inline-block
+  vertical-align middle
+  text-align center
 
-    .choice-index
-      font-weight bold
+.qid
+  @media (max-width 299px)
+    width 20%
+  @media (min-width 299px) and (max-width 639px)
+    width 26%
+  @media (min-width 639px)
+    width 15%
 
-  > :first-child
-    margin-top 0
+.header-question
+  @media (max-width 639px)
+    display none
+  @media (min-width 639px)
+    width 50%
 
-  > :last-child
-    margin-bottom 0
+.answer
+  @media (max-width 299px)
+    width 35.5%
+  @media (min-width 299px) and (max-width 639px)
+    width 34%
+  @media (min-width 639px)
+    width 15%
+
+.answer-cont
+  @media (min-width 639px)
+    font-size 1.2em
+  @media (min-width 399px) and (max-width 639px)
+    font-size 1.08em
+
+.cv-body
+  @media (max-width 399px)
+    padding 0.5em 0.75em
+  @media (min-width 399px) and (max-width 639px)
+    padding 0.5em 1.5em
+  @media (min-width 639px) and (max-width 899px)
+    padding 0.5em 2.5em
+  @media (min-width 899px)
+    padding 0.5em 5em
+
+.body-question
+  @media (min-width 639px)
+    display none
+  font-weight bold
+
+.cv-body-item
+  font-weight bold
+  color #bbb
+  @media (min-width 361px)
+    display inline-block
+    width 8%
+    min-width 60px
+    vertical-align top
+  @media (max-width 361px)
+    text-align center
+    margin-bottom 0.1em
+
+.cv-body-content
+  display inline-block
+  vertical-align top
+  margin-bottom 0.5em
+  @media (min-width 853px)
+    width 85%
+  @media (min-width 484px) and (max-width 853px)
+    width 75%
+  @media (min-width 361px) and (max-width 484px)
+    width 65%
+  @media (max-width 361px)
+    display block
+    text-align center
+    margin-bottom 0.75em
+
+.explanation
+  font-style italic
 
 .correct
   color #0c0
@@ -158,7 +237,10 @@ export default {
 
 .container
   margin 0 auto
-  padding 2em
+  @media (min-width 639px)
+    padding 0.3em 2em
+  @media (min-width 399px) and (max-width 639px)
+    padding 0.3em 1em
   max-width 1080px
 
   .opened-header

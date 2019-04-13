@@ -119,6 +119,14 @@ export default {
 .choice-btn-container
   margin 0.5em auto
   width 30%
+  max-width 20em
+  min-width 14em
+  text-align center
+
+  button
+    width 100%
+    display block
+    margin 0.6em 0
 
 .choice-btn
   width 100%
