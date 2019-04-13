@@ -44,7 +44,7 @@ export default {
     this.category = category
     this.questions = shuffle(
       levels[this.level].filter(q => this.typelist.includes(q[3]))
-    )
+    ).map(q => q.slice())
     this.questions.forEach(q => {
       const [answer] = q[1]
       q[1] = shuffle(q[1])
@@ -62,14 +62,6 @@ export default {
   },
 
   methods: {
-    shuffle (list) {
-      for (let i = 0; i < list.length; i++) {
-        let j = Math.floor(Math.random() * list.length)
-        let tmp = list[i]
-        list[i] = list[j]
-        list[j] = tmp
-      }
-    },
     nextQuestion (index) {
       this.answers.push(index)
       if (index === this.currentQuestion._answerIndex) {
