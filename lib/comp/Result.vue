@@ -202,12 +202,12 @@ export default {
 .cv-body-item
   font-weight bold
   color #bbb
-  @media (min-width 361px)
+  @media (min-width 299px)
     display inline-block
     width 8%
-    min-width 60px
+    min-width 55px
     vertical-align top
-  @media (max-width 361px)
+  @media (max-width 299px)
     text-align center
     margin-bottom 0.1em
 
@@ -216,12 +216,14 @@ export default {
   vertical-align top
   margin-bottom 0.5em
   @media (min-width 853px)
-    width 85%
+    width 90%
   @media (min-width 484px) and (max-width 853px)
-    width 75%
+    width 80%
   @media (min-width 361px) and (max-width 484px)
-    width 65%
-  @media (max-width 361px)
+    width 75%
+  @media (min-width 299px) and (max-width 361px)
+    width 70%
+  @media (max-width 299px)
     display block
     text-align center
     margin-bottom 0.75em
@@ -241,6 +243,8 @@ export default {
     padding 0.3em 2em
   @media (min-width 399px) and (max-width 639px)
     padding 0.3em 1em
+  @media (max-width 399px)
+    padding 0.3em 0
   max-width 1080px
 
   .opened-header
