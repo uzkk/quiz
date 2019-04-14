@@ -1,11 +1,16 @@
 <template>
   <div class="main-div">
     <h3 class="tac">
-      第 {{ questionCount + 1 }}/{{ questions.length }} 题
+      第 {{ questionCount + 1 }} / {{ questions.length }} 题
     </h3>
-    <h4 class="tac">
-      分类：{{ level }} / {{ category[currentQuestion[3]] }}
-    </h4>
+    <div class="question-attr tac">
+      <h4>
+        分类：{{ level }} / {{ category[currentQuestion[3]] }}
+      </h4>
+      <h4>
+        <span>出题人：</span><span class="contributors" v-for="(contrib, index) in currentQuestion[4]" :key="index">{{ contrib }}</span>
+      </h4>
+    </div>
     <div class="question tac">
       <h3>{{ currentQuestion[0] }}</h3>
       <div class="choice-btn-container" v-for="(choice, index) in currentQuestion[1]" :key="index">
@@ -87,6 +92,12 @@ export default {
 
 <style lang="stylus" scoped>
 
+.question-attr
+  margin 1.5em auto
+
+  h4
+    margin 0.4em auto
+
 .choice-btn-container
   margin 0.5em auto
   width 30%
@@ -113,6 +124,9 @@ export default {
   padding 0.5em 1.2em
   margin 1em auto
   transition 0.25s ease
+
+.contributors + .contributors
+  margin-left 0.5em
 
 .correct-hint
   color #0b0
