@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h3 class="tac">恭喜您完成 {{ level }} 难度测试！</h3>
-    <h2 class="tac">您的正确率：{{ correctNum }}/{{ questions.length }}</h2>
+    <h3 class="tac">恭喜您完成 {{ $quiz.level }} 难度测试！</h3>
+    <h2 class="tac">您的正确率：{{ correctCount }}/{{ $quiz.questions.length }}</h2>
     <div class="button-container tac">
       <Button type="warning" @click="$emit('next', 'Settings')">
         返回主界面
@@ -9,25 +9,25 @@
     </div>
     <div class="section">
       <div class="table-header">
-        <div class="th qid">题号</div>
-        <div class="th question">题目</div>
-        <div class="th answer">您的答案</div>
-        <div class="th answer">正确答案</div>
+        <span class="th qid">题号</span>
+        <span class="th question">题目</span>
+        <span class="th answer">您的答案</span>
+        <span class="th answer">正确答案</span>
       </div>
       <CollapseView
-        v-for="(question, qid) in questions"
+        v-for="(question, qid) in $quiz.questions"
         :key="qid"
-        :initial="wrongIds.includes(qid) ? 'open' : 'close'"
+        :initial="question.isCorrect ? 'close' : 'open'"
       >
         <div class="cv-header" slot="header">
-          <div class="td qid">{{ qid + 1 }}</div>
-          <div class="td question">{{ question[0] }}</div>
-          <div class="td answer" :class="wrongIds.includes(qid) ? 'incorrect' : 'correct'">
-            {{ String.fromCharCode(answers[qid] + 65) }}
-          </div>
-          <div class="td answer correct">
-            {{ String.fromCharCode(question._answerIndex + 65) }}
-          </div>
+          <span class="td qid">{{ qid + 1 }}</span>
+          <span class="td question">{{ question[0] }}</span>
+          <span class="td answer" :class="question.isCorrect ? 'correct' : 'incorrect'">
+            {{ String.fromCharCode(question.choice + 65) }}
+          </span>
+          <span class="td answer correct">
+            {{ String.fromCharCode(question.answer + 65) }}
+          </span>
         </div>
         <div class="tr question">
           <span class="item">题目</span>
@@ -48,7 +48,7 @@
       </CollapseView>
     </div>
     <div class="button-container">
-      <Button type="warning" @click="$emit('next', 'Settings')">
+      <Button type="warning" @click="$quiz.phase = 'Settings'">
         返回主界面
       </Button>
       <Button @click="$router.push(UZKK_QUIZ_BASE + 'about.html')">
@@ -65,13 +65,14 @@ import { Button, CollapseView } from '@uzkk/components'
 export default {
   components: { Button, CollapseView },
 
-  props: [
-    'level',
-    'questions',
-    'correctNum',
-    'wrongIds',
-    'answers',
-  ],
+  inject: ['$quiz'],
+
+  created () {
+    this.correctCount = this.$quiz.questions.reduce((sum, question) => {
+      question.isCorrect = question.answer === question.choice
+      return sum + Boolean(question.isCorrect)
+    }, 0)
+  },
 }
 
 </script>
@@ -133,6 +134,10 @@ export default {
     &.qid::after
       content '题'
       padding-left 2px
+
+  &.question
+    text-align left
+    margin-left -6px
 
   &.answer
     @media (min-width $MQMobile)

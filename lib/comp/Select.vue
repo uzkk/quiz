@@ -1,14 +1,21 @@
 <template>
   <div class="main-div">
     <h3 class="tac">
-      第 {{ questionCount + 1 }} / {{ questions.length }} 题
+      第 {{ currentIndex + 1 }} / {{ $quiz.questions.length }} 题
     </h3>
     <div class="question-attr tac">
       <h4>
-        分类：{{ level }} / {{ category[currentQuestion[3]] }}
+        分类：{{ $quiz.level }} / {{ category[currentQuestion[3]] }}
       </h4>
-      <h4>
-        <span>出题人：</span><span class="contributors" v-for="(contrib, index) in currentQuestion[4]" :key="index">{{ contrib }}</span>
+      <h4 v-if="Array.isArray(currentQuestion[4]) && currentQuestion[4].length">
+        出题人：
+        <span
+          class="contributors"
+          v-for="(name, index) in currentQuestion[4]"
+          :key="index"
+        >
+          {{ getContrib(name) }}
+        </span>
       </h4>
     </div>
     <div class="question tac">
@@ -23,7 +30,7 @@
       </div>
     </div>
     <div class="button-container">
-      <Button type="warning" @click="$emit('next', 'Settings')">
+      <Button type="warning" @click="$quiz.phase = 'Settings'">
         返回主界面
       </Button>
     </div>
@@ -39,50 +46,41 @@ import { shuffle } from '../utils'
 export default {
   components: { Button },
 
-  props: ['level', 'typelist'],
+  inject: ['$quiz'],
 
   data: () => ({
-    questionCount: 0,
+    currentIndex: 0,
   }),
 
   created () {
     this.category = category
-    this.questions = shuffle(
-      levels[this.level].filter(q => this.typelist.includes(q[3]))
-    ).map(q => q.slice())
-    this.questions.forEach(q => {
+    this.$quiz.questions.forEach(q => {
       const [answer] = q[1]
       q[1] = shuffle(q[1])
-      q._answerIndex = q[1].indexOf(answer)
+      q.answer = q[1].indexOf(answer)
     })
-    this.answers = []
-    this.correctNum = 0
-    this.wrongIds = []
   },
 
   computed: {
     currentQuestion () {
-      return this.questions[this.questionCount]
+      return this.$quiz.questions[this.currentIndex]
     },
   },
 
   methods: {
     nextQuestion (index) {
-      this.answers.push(index)
-      if (index === this.currentQuestion._answerIndex) {
-        this.correctNum += 1
-      } else {
-        this.wrongIds.push(this.questionCount)
+      this.currentQuestion.choice = index
+      this.currentIndex += 1
+      if (this.currentIndex > this.$quiz.questions.length - 1) {
+        this.$quiz.phase = 'Result'
       }
-      this.questionCount += 1
-      if (this.questionCount > this.questions.length - 1) {
-        this.$emit('next', 'Result', {
-          level: this.level,
-          questions: this.questions,
-          correctNum: this.correctNum,
-          wrongIds: this.wrongIds,
-          answers: this.answers,
-        })
+    },
+    getContrib (contrib) {
+      const author = this.$themeConfig.authors.find(a => a.name === contrib)
+      if (author) {
+        return author.nickname
+      } else {
+        return contrib
       }
     },
   },
