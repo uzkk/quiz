@@ -1,7 +1,8 @@
 <template>
   <div class="tac">
     <h3>请选择要跳转的题号</h3>
-    <p>绿色为已选的题目，白色为未选的题目</p>
+    <h4>已做：{{ $quiz.questions.filter(q => q.choice >= 0).length }} / {{ $quiz.questions.length }} 题</h4>
+    <p>绿色为已做的题目，白色为未做的题目</p>
     <Button
       class="qid-btn"
       v-for="(q, qid) in $quiz.questions"
@@ -11,6 +12,11 @@
     >
       {{ qid + 1 }}
     </Button>
+    <div class="button-container">
+      <Button @click="$quiz.submit">
+        提交
+      </Button>
+    </div>
   </div>
 </template>
 
@@ -27,7 +33,7 @@ export default {
     jumpToQuestion (index) {
       this.$quiz.currentIndex = index
       this.$quiz.phase = 'Select'
-    }
+    },
   },
 }
 

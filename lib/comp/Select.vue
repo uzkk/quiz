@@ -34,11 +34,14 @@
       <Button @click="prevQuestion" :disabled="$quiz.currentIndex <= 0">
         返回上一题
       </Button>
-      <Button @click="skipQuestion" :disabled="$quiz.currentIndex === $quiz.questions.length - 1">
+      <Button @click="$quiz.currentIndex += 1" :disabled="$quiz.currentIndex === $quiz.questions.length - 1">
         跳至下一题
       </Button>
       <Button @click="$quiz.phase = 'Jump'">
         选择题号
+      </Button>
+      <Button @click="$quiz.submit">
+        提交
       </Button>
     </div>
     <div class="button-container">
@@ -72,23 +75,16 @@ export default {
 
   methods: {
     nextQuestion (index) {
+      if (index === this.currentQuestion.choice) {
+        return
+      }
       this.currentQuestion.choice = index
-      this.skipQuestion()
+      if (this.$quiz.currentIndex < this.$quiz.questions.length - 1) {
+        this.$quiz.currentIndex += 1
+      }
     },
     prevQuestion () {
       this.$quiz.currentIndex -= 1
-    },
-    skipQuestion () {
-      this.$quiz.currentIndex += 1
-      if (this.$quiz.currentIndex > this.$quiz.questions.length - 1) {
-        if (this.$quiz.questions.filter(q => q.choice < 0).length > 0) {
-          if (!confirm('您有未完成的题目。若您想要完成它们，请取消此对话框并点击“选择题号”按钮查看；若您想直接进入结算页面，请点击“确定”。')) {
-            this.$quiz.currentIndex -= 1
-            return
-          }
-        }
-        this.$quiz.phase = 'Result'
-      }
     },
     getContrib (contrib) {
       const author = this.$themeConfig.authors.find(a => a.name === contrib)
