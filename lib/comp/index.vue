@@ -25,6 +25,7 @@ export default {
   data: () => ({
     phase: 'Settings',
     currentIndex: 0,
+    questions: [],
     ...getSettings(),
   }),
 
