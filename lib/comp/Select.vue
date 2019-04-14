@@ -42,7 +42,6 @@
 import { Button } from '@uzkk/components'
 import { levels, category } from '../data'
 import { shuffle } from '../utils'
-import { setSettings, useFallback } from './storage'
 
 export default {
   components: { Button },

@@ -80,7 +80,7 @@ import Button from '@theme-uzkk/components/Button'
 import Checkbox from '@theme-uzkk/components/Checkbox'
 import { levels, types } from '../data'
 import { shuffle } from '../utils'
-import { getSettings, setSettings, useFallback } from './storage'
+import { setSettings, useFallback } from './storage'
 
 export default {
   components: { Radio, Button, Checkbox },
