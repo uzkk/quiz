@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h3 class="tac">恭喜您完成 {{ level }} 难度测试！</h3>
-    <h2 class="tac">您的正确率：{{ correctNum }}/{{ questions.length }}</h2>
+    <h3 class="tac">恭喜您完成 {{ $quiz.level }} 难度测试！</h3>
+    <h2 class="tac">您的正确率：{{ correctCount }}/{{ $quiz.questions.length }}</h2>
     <div class="button-container tac">
       <Button type="warning" @click="$emit('next', 'Settings')">
         返回主界面
@@ -15,18 +15,18 @@
         <span class="th answer">正确答案</span>
       </div>
       <CollapseView
-        v-for="(question, qid) in questions"
+        v-for="(question, qid) in $quiz.questions"
         :key="qid"
-        :initial="wrongIds.includes(qid) ? 'open' : 'close'"
+        :initial="question.isCorrect ? 'close' : 'open'"
       >
         <div class="cv-header" slot="header">
           <span class="td qid">{{ qid + 1 }}</span>
           <span class="td question">{{ question[0] }}</span>
-          <span class="td answer" :class="wrongIds.includes(qid) ? 'incorrect' : 'correct'">
-            {{ String.fromCharCode(answers[qid] + 65) }}
+          <span class="td answer" :class="question.isCorrect ? 'correct' : 'incorrect'">
+            {{ String.fromCharCode(question.choice + 65) }}
           </span>
           <span class="td answer correct">
-            {{ String.fromCharCode(question._answerIndex + 65) }}
+            {{ String.fromCharCode(question.answer + 65) }}
           </span>
         </div>
         <div class="tr question">
@@ -65,13 +65,14 @@ import { Button, CollapseView } from '@uzkk/components'
 export default {
   components: { Button, CollapseView },
 
-  props: [
-    'level',
-    'questions',
-    'correctNum',
-    'wrongIds',
-    'answers',
-  ],
+  inject: ['$quiz'],
+
+  created () {
+    this.correctCount = this.$quiz.questions.reduce((sum, question) => {
+      question.isCorrect = question.answer === question.choice
+      return sum + Boolean(question.isCorrect)
+    }, 0)
+  },
 }
 
 </script>

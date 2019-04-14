@@ -1,6 +1,6 @@
 <template>
   <FadeSlideTransition>
-    <component class="quiz" :is="phase" :key="phase" @next="updatePhase" v-bind="state"/>
+    <component class="quiz" :is="phase" :key="phase"/>
   </FadeSlideTransition>
 </template>
 
@@ -10,6 +10,7 @@ import Result from './Result'
 import Select from './Select'
 import Settings from './Settings'
 import FadeSlideTransition from '@theme-uzkk/transitions/FadeSlide'
+import { getSettings } from './storage'
 
 export default {
   components: {
@@ -21,14 +22,13 @@ export default {
 
   data: () => ({
     phase: 'Settings',
-    state: {},
+    ...getSettings(),
   }),
 
-  methods: {
-    updatePhase (nextPhase, state) {
-      Object.assign(this.state, state)
-      this.phase = nextPhase
-    },
+  provide () {
+    return {
+      $quiz: this,
+    }
   },
 }
 

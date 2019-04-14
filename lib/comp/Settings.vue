@@ -3,24 +3,24 @@
     <div class="section">
       <p class="title">
         <Checkbox v-model="allSelected">
-          所有题目 ({{ getQuestionCount('abcdefgABCDEZ') }})
+          所有题目 ({{ getQuestions('abcdefgABCDEZ').length }})
         </Checkbox>
       </p>
       <ul>
         <li>
           <p>
             <Checkbox v-model="allFirstSelected">
-              一设 ({{ getQuestionCount('abcdefg') }})
+              一设 ({{ getQuestions('abcdefg').length }})
             </Checkbox>
           </p>
           <ul>
             <li class="inline medium" v-for="(type, index) in types.first" :key="index">
               <Checkbox
-                :value="typelist.includes(type.tag)"
+                :value="$quiz.range.includes(type.tag)"
                 :label="type.name"
                 @update="toggleType(type.tag)"
               >
-                {{ type.name }} ({{ getQuestionCount(type.tag) }})
+                {{ type.name }} ({{ getQuestions(type.tag).length }})
               </Checkbox>
             </li>
           </ul>
@@ -28,17 +28,17 @@
         <li>
           <p>
             <Checkbox v-model="allOthersSelected">
-              二设 / 考据 ({{ getQuestionCount('ABCDEZ') }})
+              二设 / 考据 ({{ getQuestions('ABCDEZ').length }})
             </Checkbox>
           </p>
           <ul>
             <li class="inline medium" v-for="(type, index) in types.others" :key="index">
               <Checkbox
-                :value="typelist.includes(type.tag)"
+                :value="$quiz.range.includes(type.tag)"
                 :label="type.name"
                 @update="toggleType(type.tag)"
               >
-                {{ type.name }} ({{ getQuestionCount(type.tag) }})
+                {{ type.name }} ({{ getQuestions(type.tag).length }})
               </Checkbox>
             </li>
           </ul>
@@ -51,8 +51,8 @@
         <span>选择难度：</span>
         <ul class="inline">
           <li class="inline medium" v-for="(lv, index) in levels" :key="index">
-            <Radio :label="lv" v-model="level">
-              {{ lv }} ({{ getQuestionCount('abcdefgABCDEZ', lv) }})
+            <Radio :label="lv" v-model="$quiz.level">
+              {{ lv }} ({{ getQuestions('abcdefgABCDEZ', lv).length }})
             </Radio>
           </li>
         </ul>
@@ -60,8 +60,8 @@
     </div>
 
     <div class="button-container">
-      <Button @click="nextPart" :disabled="!currentQuestionCount">
-        开始 ({{ currentQuestionCount }})
+      <Button @click="nextPart" :disabled="!questions.length">
+        开始 ({{ questions.length }})
       </Button>
       <Button @click="useFallback">
         恢复默认设置
@@ -79,12 +79,13 @@ import Radio from '@theme-uzkk/components/Radio'
 import Button from '@theme-uzkk/components/Button'
 import Checkbox from '@theme-uzkk/components/Checkbox'
 import { levels, types } from '../data'
+import { shuffle } from '../utils'
 import { getSettings, setSettings, useFallback } from './storage'
 
 export default {
   components: { Radio, Button, Checkbox },
 
-  data: () => getSettings(),
+  inject: ['$quiz'],
 
   created () {
     this.levels = ['Easy', 'Normal', 'Hard', 'Lunatic']
@@ -97,69 +98,71 @@ export default {
   computed: {
     allSelected: {
       get () {
-        return this.typelist.length === this.all.length
+        return this.$quiz.range.length === this.all.length
       },
       set (value) {
-        this.typelist = value ? this.all : ''
+        this.$quiz.range = value ? this.all : ''
       },
     },
     allFirstSelected: {
       get () {
         for (let type of this.first) {
-          if (!this.typelist.includes(type)) {
+          if (!this.$quiz.range.includes(type)) {
             return false
           }
         }
         return true
       },
       set (value) {
-        const others = this.typelist.match(/^[A-Z]*/)[0]
-        this.typelist = others + (value ? this.first : '')
+        const others = this.$quiz.range.match(/^[A-Z]*/)[0]
+        this.$quiz.range = others + (value ? this.first : '')
       },
     },
     allOthersSelected: {
       get () {
         for (let type of this.others) {
-          if (!this.typelist.includes(type)) {
+          if (!this.$quiz.range.includes(type)) {
             return false
           }
         }
         return true
       },
       set (value) {
-        const first = this.typelist.match(/[a-z]*$/)[0]
-        this.typelist = (value ? this.others : '') + first
+        const first = this.$quiz.range.match(/[a-z]*$/)[0]
+        this.$quiz.range = (value ? this.others : '') + first
       },
     },
-    currentQuestionCount () {
-      return this.getQuestionCount(this.typelist)
+    questions () {
+      return this.getQuestions(this.$quiz.range)
     },
   },
 
   methods: {
     toggleType (tag) {
-      const index = this.typelist.indexOf(tag)
-      const chars = this.typelist.split('')
+      const index = this.$quiz.range.indexOf(tag)
+      const chars = this.$quiz.range.split('')
       if (index > -1) {
         chars.splice(index, 1)
-        this.typelist = chars.join('')
+        this.$quiz.range = chars.join('')
       } else {
         chars.push(tag)
-        this.typelist = chars.sort().join('')
+        this.$quiz.range = chars.sort().join('')
       }
     },
-    getQuestionCount (typelist, level = this.level) {
-      return levels[level].filter(t => typelist.includes(t[3])).length
+    getQuestions (range, level = this.$quiz.level) {
+      return levels[level].filter(t => range.includes(t[3]))
     },
     nextPart () {
-      this.$emit('next', 'Select', setSettings(this))
+      setSettings(this.$quiz)
+      this.$quiz.questions = shuffle(this.questions).map(q => q.slice())
+      this.$quiz.phase = 'Select'
     },
     toAboutPage () {
-      setSettings(this)
+      setSettings(this.$quiz)
       this.$router.push(this.UZKK_QUIZ_BASE + 'about.html')
     },
     useFallback () {
-      useFallback(this)
+      useFallback(this.$quiz)
     },
   },
 }
