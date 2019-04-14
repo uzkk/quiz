@@ -7,8 +7,15 @@
       <h4>
         分类：{{ level }} / {{ category[currentQuestion[3]] }}
       </h4>
-      <h4>
-        <span>出题人：</span><span class="contributors" v-for="(contrib, index) in currentQuestion[4]" :key="index">{{ contrib }}</span>
+      <h4 v-if="Array.isArray(currentQuestion[4]) && currentQuestion[4].length">
+        出题人：
+        <span
+          class="contributors"
+          v-for="(name, index) in currentQuestion[4]"
+          :key="index"
+        >
+          {{ getContrib(name) }}
+        </span>
       </h4>
     </div>
     <div class="question tac">
@@ -83,6 +90,14 @@ export default {
           wrongIds: this.wrongIds,
           answers: this.answers,
         })
+      }
+    },
+    getContrib (contrib) {
+      const author = this.$themeConfig.authors.find(a => a.name === contrib)
+      if (author) {
+        return author.nickname
+      } else {
+        return contrib
       }
     },
   },
