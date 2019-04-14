@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="button-container">
-      <Button type="warning" @click="$emit('next', 'Settings')">
+      <Button type="warning" @click="$quiz.phase = 'Settings'">
         返回主界面
       </Button>
     </div>
