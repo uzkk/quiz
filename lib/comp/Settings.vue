@@ -154,7 +154,14 @@ export default {
     },
     nextPart () {
       setSettings(this.$quiz)
+      this.$quiz.currentIndex = 0
       this.$quiz.questions = shuffle(this.questions).map(q => q.slice())
+      this.$quiz.questions.forEach(q => {
+        const [answer] = q[1]
+        q[1] = shuffle(q[1])
+        q.answer = q[1].indexOf(answer)
+        q.choice = -1
+      })
       this.$quiz.phase = 'Select'
     },
     toAboutPage () {

@@ -23,7 +23,7 @@
           <span class="td qid">{{ qid + 1 }}</span>
           <span class="td question">{{ question[0] }}</span>
           <span class="td answer" :class="question.isCorrect ? 'correct' : 'incorrect'">
-            {{ String.fromCharCode(question.choice + 65) }}
+            {{ question.choice >= 0 ? String.fromCharCode(question.choice + 65) : '—' }}
           </span>
           <span class="td answer correct">
             {{ String.fromCharCode(question.answer + 65) }}

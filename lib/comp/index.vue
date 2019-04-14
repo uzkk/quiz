@@ -9,6 +9,7 @@
 import Result from './Result'
 import Select from './Select'
 import Settings from './Settings'
+import Jump from './Jump'
 import FadeSlideTransition from '@theme-uzkk/transitions/FadeSlide'
 import { getSettings } from './storage'
 
@@ -17,11 +18,13 @@ export default {
     Result,
     Select,
     Settings,
+    Jump,
     FadeSlideTransition,
   },
 
   data: () => ({
     phase: 'Settings',
+    currentIndex: 0,
     ...getSettings(),
   }),
 

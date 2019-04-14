@@ -1,7 +1,7 @@
 <template>
   <div class="main-div">
     <h3 class="tac">
-      第 {{ currentIndex + 1 }} / {{ $quiz.questions.length }} 题
+      第 {{ $quiz.currentIndex + 1 }} / {{ $quiz.questions.length }} 题
     </h3>
     <div class="question-attr tac">
       <h4>
@@ -22,12 +22,24 @@
       <h3>{{ currentQuestion[0] }}</h3>
       <div class="choice-btn-container" v-for="(choice, index) in currentQuestion[1]" :key="index">
         <Button
+          :type="currentQuestion.choice === index ? 'success' : 'default'"
           class="choice-btn"
           @click="nextQuestion(index)"
         >
           {{ String.fromCharCode(index + 65) }}. {{ choice }}
         </Button>
       </div>
+    </div>
+    <div class="button-container">
+      <Button @click="prevQuestion" :disabled="$quiz.currentIndex <= 0">
+        返回上一题
+      </Button>
+      <Button @click="skipQuestion" :disabled="$quiz.currentIndex === $quiz.questions.length - 1">
+        跳至下一题
+      </Button>
+      <Button @click="$quiz.phase = 'Jump'">
+        选择题号
+      </Button>
     </div>
     <div class="button-container">
       <Button type="warning" @click="$quiz.phase = 'Settings'">
@@ -48,30 +60,33 @@ export default {
 
   inject: ['$quiz'],
 
-  data: () => ({
-    currentIndex: 0,
-  }),
-
   created () {
     this.category = category
-    this.$quiz.questions.forEach(q => {
-      const [answer] = q[1]
-      q[1] = shuffle(q[1])
-      q.answer = q[1].indexOf(answer)
-    })
   },
 
   computed: {
     currentQuestion () {
-      return this.$quiz.questions[this.currentIndex]
+      return this.$quiz.questions[this.$quiz.currentIndex]
     },
   },
 
   methods: {
     nextQuestion (index) {
       this.currentQuestion.choice = index
-      this.currentIndex += 1
-      if (this.currentIndex > this.$quiz.questions.length - 1) {
+      this.skipQuestion()
+    },
+    prevQuestion () {
+      this.$quiz.currentIndex -= 1
+    },
+    skipQuestion () {
+      this.$quiz.currentIndex += 1
+      if (this.$quiz.currentIndex > this.$quiz.questions.length - 1) {
+        if (this.$quiz.questions.filter(q => q.choice < 0).length > 0) {
+          if (!confirm('您有未完成的题目。若您想要完成它们，请取消此对话框并点击“选择题号”按钮查看；若您想直接进入结算页面，请点击“确定”。')) {
+            this.$quiz.currentIndex -= 1
+            return
+          }
+        }
         this.$quiz.phase = 'Result'
       }
     },
