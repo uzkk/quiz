@@ -33,7 +33,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^5.2.2",
     "vuepress": "^1.0.0-alpha.47",
-    "vuepress-theme-uzkk": "^1.0.0-alpha.28"
+    "vuepress-theme-uzkk": "^1.0.0-alpha.29"
   },
   "dependencies": {
     "js-yaml-loader": "^1.0.1",

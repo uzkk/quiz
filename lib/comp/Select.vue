@@ -31,12 +31,14 @@
       </div>
     </div>
     <div class="button-container">
-      <Button @click="prevQuestion" :disabled="$quiz.currentIndex <= 0">
-        返回上一题
-      </Button>
-      <Button @click="skipQuestion" :disabled="$quiz.currentIndex === $quiz.questions.length - 1">
-        跳至下一题
-      </Button>
+      <div class="row">
+        <Button @click="prevQuestion" :disabled="$quiz.currentIndex <= 0">
+          上一题
+        </Button>
+        <Button @click="skipQuestion" :disabled="$quiz.currentIndex === $quiz.questions.length - 1">
+          下一题
+        </Button>
+      </div>
       <Button @click="$quiz.phase = 'Jump'">
         选择题号
       </Button>
