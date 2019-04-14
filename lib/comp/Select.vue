@@ -1,7 +1,7 @@
 <template>
   <div class="main-div">
     <h3 class="tac">
-      第 {{ questionCount }}/{{ shuffledQuestions.length }} 题
+      第 {{ questionCount + 1 }}/{{ questions.length }} 题
     </h3>
     <h4 class="tac">
       分类：{{ level }} / {{ category[currentQuestion[3]] }}
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="button-container">
-      <Button type="warning" @click="backToSettings">
+      <Button type="warning" @click="$emit('next', 'Settings')">
         返回主界面
       </Button>
     </div>
@@ -27,83 +27,57 @@
 
 <script>
 
-import Button from '@theme-uzkk/components/Button'
+import { Button } from '@uzkk/components'
 import { levels, category } from '../data'
+import { shuffle } from '../utils'
 
 export default {
   components: { Button },
 
   props: ['level', 'typelist'],
 
-  data () {
-    return {
-      shuffledQuestions: [],
-      questionCount: 1,
-      currentQuestion: undefined,
-    }
-  },
+  data: () => ({
+    questionCount: 0,
+  }),
 
   created () {
     this.category = category
-    this.questions = levels[this.level].filter(q => {
-      return this.typelist.includes(q[3])
+    this.questions = shuffle(
+      levels[this.level].filter(q => this.typelist.includes(q[3]))
+    ).map(q => q.slice())
+    this.questions.forEach(q => {
+      const [answer] = q[1]
+      q[1] = shuffle(q[1])
+      q._answerIndex = q[1].indexOf(answer)
     })
-    this.shuffle(this.questions)
-    for (let question of this.questions) {
-      let _question = []
-      for (let item of question) {
-        let _item
-        if (item instanceof Array) {
-          _item = item.slice()
-        } else {
-          _item = item
-        }
-        _question.push(_item)
-      }
-      this.shuffledQuestions.push(_question)
-    }
-    this.setQuestion(0)
     this.answers = []
     this.correctNum = 0
     this.wrongIds = []
   },
 
+  computed: {
+    currentQuestion () {
+      return this.questions[this.questionCount]
+    },
+  },
+
   methods: {
-    shuffle (list) {
-      for (let i = 0; i < list.length; i++) {
-        let j = Math.floor(Math.random() * list.length)
-        let tmp = list[i]
-        list[i] = list[j]
-        list[j] = tmp
-      }
-    },
-    setQuestion (index) {
-      this.currentQuestion = this.shuffledQuestions[index]
-      this.shuffle(this.currentQuestion[1])
-    },
-    backToSettings () {
-      this.$emit('next', 'Settings')
-    },
     nextQuestion (index) {
       this.answers.push(index)
-      let choice = this.currentQuestion[1][index]
-      if (choice === this.questions[this.questionCount - 1][1][0]) {
+      if (index === this.currentQuestion._answerIndex) {
         this.correctNum += 1
       } else {
-        this.wrongIds.push(this.questionCount - 1)
+        this.wrongIds.push(this.questionCount)
       }
       this.questionCount += 1
-      if (this.questionCount > this.questions.length) {
+      if (this.questionCount > this.questions.length - 1) {
         this.$emit('next', 'Result', {
           level: this.level,
           questions: this.questions,
-          shuffledQuestions: this.shuffledQuestions,
           correctNum: this.correctNum,
           wrongIds: this.wrongIds,
           answers: this.answers,
         })
-      } else {
-        this.setQuestion(this.questionCount - 1)
       }
     },
   },
@@ -112,9 +86,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
-.tac
-  text-align center
 
 .choice-btn-container
   margin 0.5em auto

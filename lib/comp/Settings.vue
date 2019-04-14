@@ -60,13 +60,13 @@
     </div>
 
     <div class="button-container">
-      <Button
-        @click="$emit('next', 'Select', { level, typelist })"
-        :disabled="!currentQuestionCount"
-      >
+      <Button @click="nextPart" :disabled="!currentQuestionCount">
         开始 ({{ currentQuestionCount }})
       </Button>
-      <Button @click="$router.push(UZKK_QUIZ_BASE + 'about.html')">
+      <Button @click="useFallback">
+        恢复默认设置
+      </Button>
+      <Button @click="toAboutPage">
         关于知识测试
       </Button>
     </div>
@@ -79,14 +79,12 @@ import Radio from '@theme-uzkk/components/Radio'
 import Button from '@theme-uzkk/components/Button'
 import Checkbox from '@theme-uzkk/components/Checkbox'
 import { levels, types } from '../data'
+import { getSettings, setSettings, useFallback } from './storage'
 
 export default {
   components: { Radio, Button, Checkbox },
 
-  data: () => ({
-    level: 'Easy',
-    typelist: 'abcdef',
-  }),
+  data: () => getSettings(),
 
   created () {
     this.levels = ['Easy', 'Normal', 'Hard', 'Lunatic']
@@ -152,6 +150,16 @@ export default {
     },
     getQuestionCount (typelist, level = this.level) {
       return levels[level].filter(t => typelist.includes(t[3])).length
+    },
+    nextPart () {
+      this.$emit('next', 'Select', setSettings(this))
+    },
+    toAboutPage () {
+      setSettings(this)
+      this.$router.push(this.UZKK_QUIZ_BASE + 'about.html')
+    },
+    useFallback () {
+      useFallback(this)
     },
   },
 }
