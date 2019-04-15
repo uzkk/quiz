@@ -7,15 +7,8 @@
       <h4>
         分类：{{ $quiz.level }} / {{ category[currentQuestion.category] }}
       </h4>
-      <h4 v-if="Array.isArray(currentQuestion.contrib) && currentQuestion.contrib.length">
-        出题人：
-        <span
-          class="contributors"
-          v-for="(name, index) in currentQuestion.contrib"
-          :key="index"
-        >
-          {{ getContrib(name) }}
-        </span>
+      <h4 v-if="currentQuestion.contrib">
+        出题人：{{ getContrib(currentQuestion.contrib) }}
       </h4>
     </div>
     <div class="question tac">
@@ -135,9 +128,6 @@ export default {
   padding 0.5em 1.2em
   margin 1em auto
   transition 0.25s ease
-
-.contributors + .contributors
-  margin-left 0.5em
 
 .correct-hint
   color #0b0
