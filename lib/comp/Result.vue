@@ -3,7 +3,7 @@
     <h3 class="tac">恭喜您完成 {{ $quiz.level }} 难度测试！</h3>
     <h2 class="tac">您的正确率：{{ correctCount }}/{{ $quiz.questions.length }}</h2>
     <div class="button-container tac">
-      <Button type="warning" @click="$emit('next', 'Settings')">
+      <Button type="warning" @click="$quiz.phase = 'Settings'">
         返回主界面
       </Button>
     </div>
