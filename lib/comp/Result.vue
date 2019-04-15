@@ -21,7 +21,7 @@
       >
         <div class="cv-header" slot="header">
           <span class="td qid">{{ qid + 1 }}</span>
-          <span class="td question">{{ question[0] }}</span>
+          <span class="td question">{{ question.stem }}</span>
           <span class="td answer" :class="question.isCorrect ? 'correct' : 'incorrect'">
             {{ question.choice >= 0 ? String.fromCharCode(question.choice + 65) : '—' }}
           </span>
@@ -31,11 +31,11 @@
         </div>
         <div class="tr question">
           <span class="item">题目</span>
-          <span class="detail">{{ question[0] }}</span>
+          <span class="detail">{{ question.stem }}</span>
         </div>
         <div
           class="tr"
-          v-for="(choice, cid) in question[1]"
+          v-for="(choice, cid) in question.options"
           :key="cid"
         >
           <span class="item">选项{{ String.fromCharCode(cid + 65) }}</span>
@@ -43,7 +43,7 @@
         </div>
         <div class="tr">
           <span class="item">解析</span>
-          <span class="detail explanation">{{ question[2] }}</span>
+          <span class="detail explanation">{{ question.explanation }}</span>
         </div>
       </CollapseView>
     </div>

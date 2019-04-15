@@ -5,13 +5,13 @@
     </h3>
     <div class="question-attr tac">
       <h4>
-        分类：{{ $quiz.level }} / {{ category[currentQuestion[3]] }}
+        分类：{{ $quiz.level }} / {{ category[currentQuestion.category] }}
       </h4>
-      <h4 v-if="Array.isArray(currentQuestion[4]) && currentQuestion[4].length">
+      <h4 v-if="Array.isArray(currentQuestion.contrib) && currentQuestion.contrib.length">
         出题人：
         <span
           class="contributors"
-          v-for="(name, index) in currentQuestion[4]"
+          v-for="(name, index) in currentQuestion.contrib"
           :key="index"
         >
           {{ getContrib(name) }}
@@ -19,8 +19,8 @@
       </h4>
     </div>
     <div class="question tac">
-      <h3>{{ currentQuestion[0] }}</h3>
-      <div class="choice-btn-container" v-for="(choice, index) in currentQuestion[1]" :key="index">
+      <h3>{{ currentQuestion.stem }}</h3>
+      <div class="choice-btn-container" v-for="(choice, index) in currentQuestion.options" :key="index">
         <Button
           :type="currentQuestion.choice === index ? 'success' : 'default'"
           class="choice-btn"
