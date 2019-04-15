@@ -31,7 +31,8 @@ export default {
 
   methods: {
     submit () {
-      if (this.questions.filter(q => q.choice < 0).length === 0 || confirm('您有未完成的题目，确认现在提交吗？')) {
+      const incomplete = this.questions.filter(q => q.choice < 0).length
+      if (!incomplete || confirm(`您还有 ${incomplete} 道题目尚未完成，确认现在提交吗？`)) {
         this.phase = 'Result'
       }
     },
