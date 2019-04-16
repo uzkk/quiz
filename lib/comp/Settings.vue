@@ -3,14 +3,14 @@
     <div class="section">
       <p class="title">
         <Checkbox v-model="allSelected">
-          所有题目 ({{ getQuestions('abcdefgABCDEZ').length }})
+          所有题目 ({{ getQuestions(all).length }})
         </Checkbox>
       </p>
       <ul>
         <li>
           <p>
             <Checkbox v-model="allFirstSelected">
-              一设 ({{ getQuestions('abcdefg').length }})
+              一设 ({{ getQuestions(first).length }})
             </Checkbox>
           </p>
           <ul>
@@ -28,7 +28,7 @@
         <li>
           <p>
             <Checkbox v-model="allOthersSelected">
-              二设 / 考据 ({{ getQuestions('ABCDEZ').length }})
+              二设 / 考据 ({{ getQuestions(others).length }})
             </Checkbox>
           </p>
           <ul>
@@ -52,7 +52,7 @@
         <ul class="inline">
           <li class="inline medium" v-for="(lv, index) in levels" :key="index">
             <Radio :label="lv" v-model="$quiz.level">
-              {{ lv }} ({{ getQuestions('abcdefgABCDEZ', lv).length }})
+              {{ lv }} ({{ getQuestions(all, lv).length }})
             </Radio>
           </li>
         </ul>
@@ -90,7 +90,7 @@ export default {
   created () {
     this.levels = ['Easy', 'Normal', 'Hard', 'Lunatic']
     this.types = types
-    this.first = 'abcdefg'
+    this.first = 'abcdefgz'
     this.others = 'ABCDEZ'
     this.all = this.others + this.first
   },

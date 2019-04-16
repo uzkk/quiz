@@ -13,6 +13,8 @@ first:
     name: FTG 相关
   - tag: g
     name: 旧作·西方
+  - tag: z
+    name: 综合类
 
 others:
   - tag: A
