@@ -11,10 +11,11 @@
         出题人：{{ getContrib(currentQuestion.contrib) }}
       </h4>
     </div>
-    <div class="question tac">
+    <div class="tac">
       <h3>{{ currentQuestion.stem }}</h3>
-      <div class="choice-btn-container" v-for="(choice, index) in currentQuestion.options" :key="index">
+      <div class="options">
         <Button
+          v-for="(choice, index) in currentQuestion.options" :key="index"
           :type="currentQuestion.choice === index ? 'success' : 'default'"
           class="choice-btn"
           @click="nextQuestion(index)"
@@ -102,58 +103,18 @@ export default {
   h4
     margin 0.4em auto
 
-.choice-btn-container
+.options
   margin 0.5em auto
-  width 30%
-  max-width 20em
+  width fit-content
+  max-width 1000px
   min-width 14em
   text-align center
+  @media (min-width 800px)
+    min-width 30%
 
   button
     width 100%
     display block
-    margin 0.6em 0
-
-.choice-btn
-  width 100%
-  display block
-  margin 0.5em auto
-
-.judge
-  width 45%
-  border-width 1px
-  border-color #444
-  border-radius 1.6em
-  background-color #fffff0
-  padding 0.5em 1.2em
-  margin 1em auto
-  transition 0.25s ease
-
-.correct-hint
-  color #0b0
-
-.incorrect-hint
-  color #b00
-
-.correct-answer
-  font-weight bold
-
-.next-btn-container
-  margin 1.2em auto
-  width 50%
-
-.next-btn
-  width 100%
-  display block
-  margin 0.7em auto
-
-.back-btn-container
-  margin 1.8em auto 0
-  width 30%
-
-.back-btn
-  width 100%
-  display block
-  margin 0.8em auto
+    margin 0.5em auto
 
 </style>
