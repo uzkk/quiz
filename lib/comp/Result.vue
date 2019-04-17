@@ -30,20 +30,20 @@
           </span>
         </div>
         <div class="tr question">
-          <span class="item">题目</span>
-          <span class="detail">{{ question.stem }}</span>
+          <div class="item">题目</div>
+          <div class="detail">{{ question.stem }}</div>
         </div>
         <div
           class="tr"
           v-for="(choice, cid) in question.options"
           :key="cid"
         >
-          <span class="item">选项{{ String.fromCharCode(cid + 65) }}</span>
-          <span class="detail">{{ choice }}</span>
+          <div class="item">选项{{ String.fromCharCode(cid + 65) }}</div>
+          <div class="detail">{{ choice }}</div>
         </div>
         <div class="tr">
-          <span class="item">解析</span>
-          <span class="detail explanation">{{ question.explanation }}</span>
+          <div class="item">解析</div>
+          <Explanation class="detail" :data="question.explanation"/>
         </div>
       </CollapseView>
     </div>
@@ -61,9 +61,10 @@
 <script>
 
 import { Button, CollapseView } from '@uzkk/components'
+import Explanation from './Explanation'
 
 export default {
-  components: { Button, CollapseView },
+  components: { Button, CollapseView, Explanation },
 
   inject: ['$quiz'],
 
