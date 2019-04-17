@@ -8,7 +8,7 @@
         分类：{{ $quiz.level }} / {{ category[currentQuestion.category] }}
       </h4>
       <h4 v-if="currentQuestion.contrib">
-        出题人：{{ getContrib(currentQuestion.contrib) }}
+        出题人：{{ $getAuthorName(currentQuestion.contrib) }}
       </h4>
     </div>
     <div class="tac">
@@ -81,14 +81,6 @@ export default {
     },
     prevQuestion () {
       this.$quiz.currentIndex -= 1
-    },
-    getContrib (contrib) {
-      const author = this.$themeConfig.authors.find(a => a.name === contrib)
-      if (author) {
-        return author.nickname
-      } else {
-        return contrib
-      }
     },
   },
 }
