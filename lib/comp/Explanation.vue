@@ -8,6 +8,10 @@
         <div class="quote-text">{{ node.text }}</div>
         <div class="quote-source">——{{ node.source }}</div>
       </div>
+      <figure v-else-if="node.type === 'figure'" :key="index" class="figure">
+        <image :src="node.src"/>
+        <figcaption v-if="node.caption">{{ node.caption }}</figcaption>
+      </figure>
     </template>
   </div>
 </template>
