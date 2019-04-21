@@ -54,8 +54,8 @@ FTG 游戏相关信息。包括游戏机制和角色出场细节等信息。
 下面列出了全体供题人员，感谢你们！（列表按照出题数量降序排列）
 
 <ul>
-  <li v-for="([author], index) in contribs">
-    {{ $getAuthorName(author) }}
+  <li v-for="([author, count], index) in contribs">
+    ({{ count }}) {{ $getAuthorName(author) }}
   </li>
 </ul>
 
