@@ -51,33 +51,37 @@ FTG 游戏相关信息。包括游戏机制和角色出场细节等信息。
 
 ### 供题人员
 
-下面列出了全体供题人员，感谢你们！（括号中数字表示出题数量）
+下面列出了全体供题人员，感谢你们！
 
-<ul>
-  <li v-for="([author, count], index) in contribs">
-    ({{ count }}) {{ $getAuthorName(author) }}
-  </li>
-</ul>
+<table class="quiz-contribs">
+  <tr>
+    <th class="name">署名</th>
+    <th class="count">供题量</th>
+    <th class="easy">Easy</th>
+    <th class="normal">Normal</th>
+    <th class="hard">Hard</th>
+    <th class="lunatic">Lunatic</th>
+    <th class="master">擅长的类型</th>
+  </tr>
+  <tr v-for="([author, data], index) in $uzkk.quizContribs">
+    <td class="name">{{ $getAuthorName(author) }}</td>
+    <td class="count">{{ data.count }}</td>
+    <td class="easy">{{ (data.Easy / data.count * 100).toFixed(0) }}%</td>
+    <td class="normal">{{ (data.Normal / data.count * 100).toFixed(0) }}%</td>
+    <td class="hard">{{ (data.Hard / data.count * 100).toFixed(0) }}%</td>
+    <td class="lunatic">{{ (data.Lunatic / data.count * 100).toFixed(0) }}%</td>
+    <td class="master">
+      <template v-if="data.master.length">
+        <span class="item" v-for="item in data.master">
+          {{ item }}
+        </span>
+      </template>
+      <template v-else>--</template>
+    </td>
+  </tr>
+</table>
 
-<script>
-import { authors } from '../data'
-
-export default {
-  created () {
-    this.contribs = Array
-      .from(Object.entries(authors))
-      .sort(([name1, count1], [name2, count2]) => {
-        return count1 < count2
-          ? 1
-          : count1 > count2
-          ? -1
-          : name1 < name2
-          ? 1
-          : -1
-      })
-  },
-}
-</script>
+<style src="../styles/about.styl" lang="stylus"></style>
 
 ## 版权与协议
 

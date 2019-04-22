@@ -1,0 +1,18 @@
+table.quiz-contribs
+  margin 1rem auto !important
+
+  .name, .count, .master
+    text-align center
+
+  td.easy, td.normal, td.hard, td.lunatic
+    text-align right
+
+  .easy, .normal, .hard, .lunatic
+    @media (max-width 906px)
+      display none
+
+  .master
+    .item:not(:last-child)::after
+      content: "·"
+    @media (max-width 560px)
+      display none
