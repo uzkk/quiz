@@ -32,11 +32,11 @@ export default {
   }),
 
   created () {
-    const { level, range = 'abcdefz' } = this.$route.query
+    const { level, range = 'abcdefz', max } = this.$route.query
     if (!(level in levels)) return
     this.level = level
     this.range = range
-    this.initTest()
+    this.initTest(max)
   },
 
   methods: {
@@ -49,9 +49,9 @@ export default {
     getQuestions (range = this.range, level = this.level) {
       return levels[level].filter(t => range.includes(t[3]))
     },
-    initTest () {
+    initTest (max = this.max) {
       this.currentIndex = 0
-      this.questions = shuffle(this.getQuestions())
+      this.questions = shuffle(this.getQuestions().slice(0, max))
         .map(([stem, options, explanation, category, contrib]) => {
           const [_answer] = options
           options = shuffle(options)
