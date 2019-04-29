@@ -49,7 +49,7 @@ export default {
     getQuestions (range = this.range, level = this.level) {
       return levels[level].filter(t => range.includes(t[3]))
     },
-    initTest (max = this.max) {
+    initTest (max = this.max || Infinity) {
       this.currentIndex = 0
       this.questions = shuffle(this.getQuestions().slice(0, max))
         .map(([stem, options, explanation, category, contrib]) => {
