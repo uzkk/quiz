@@ -11,7 +11,9 @@ import Select from './Select'
 import Settings from './Settings'
 import Jump from './Jump'
 import FadeSlideTransition from '@theme-uzkk/transitions/FadeSlide'
+import { levels } from '../data'
 import { getSettings } from './storage'
+import { shuffle } from '../utils'
 
 export default {
   components: {
@@ -29,12 +31,35 @@ export default {
     ...getSettings(),
   }),
 
+  created () {
+    const { level, range = 'abcdefz' } = this.$route.query
+    if (!(level in levels)) return
+    this.level = level
+    this.range = range
+    this.initTest()
+  },
+
   methods: {
     submit () {
       const incomplete = this.questions.filter(q => q.choice < 0).length
       if (!incomplete || confirm(`您还有 ${incomplete} 道题目尚未完成，确认现在提交吗？`)) {
         this.phase = 'Result'
       }
+    },
+    getQuestions (range = this.range, level = this.level) {
+      return levels[level].filter(t => range.includes(t[3]))
+    },
+    initTest () {
+      this.currentIndex = 0
+      this.questions = shuffle(this.getQuestions())
+        .map(([stem, options, explanation, category, contrib]) => {
+          const [_answer] = options
+          options = shuffle(options)
+          const answer = options.indexOf(_answer)
+          const choice = -1
+          return { stem, options, explanation, category, contrib, answer, choice }
+        })
+      this.phase = 'Select'
     },
   },
 

@@ -3,14 +3,14 @@
     <div class="section">
       <p class="title">
         <Checkbox v-model="allSelected">
-          所有题目 ({{ getQuestions(all).length }})
+          所有题目 ({{ $quiz.getQuestions(all).length }})
         </Checkbox>
       </p>
       <ul>
         <li>
           <p>
             <Checkbox v-model="allFirstSelected">
-              一设 ({{ getQuestions(first).length }})
+              一设 ({{ $quiz.getQuestions(first).length }})
             </Checkbox>
           </p>
           <ul>
@@ -20,7 +20,7 @@
                 :label="type.name"
                 @update="toggleType(type.tag)"
               >
-                {{ type.name }} ({{ getQuestions(type.tag).length }})
+                {{ type.name }} ({{ $quiz.getQuestions(type.tag).length }})
               </Checkbox>
             </li>
           </ul>
@@ -28,7 +28,7 @@
         <li>
           <p>
             <Checkbox v-model="allOthersSelected">
-              二设 / 考据 ({{ getQuestions(others).length }})
+              二设 / 考据 ({{ $quiz.getQuestions(others).length }})
             </Checkbox>
           </p>
           <ul>
@@ -38,7 +38,7 @@
                 :label="type.name"
                 @update="toggleType(type.tag)"
               >
-                {{ type.name }} ({{ getQuestions(type.tag).length }})
+                {{ type.name }} ({{ $quiz.getQuestions(type.tag).length }})
               </Checkbox>
             </li>
           </ul>
@@ -52,7 +52,7 @@
         <ul class="inline">
           <li class="inline medium" v-for="(lv, index) in levels" :key="index">
             <Radio :label="lv" v-model="$quiz.level">
-              {{ lv }} ({{ getQuestions(all, lv).length }})
+              {{ lv }} ({{ $quiz.getQuestions(all, lv).length }})
             </Radio>
           </li>
         </ul>
@@ -78,8 +78,7 @@
 import Radio from '@theme-uzkk/components/Radio'
 import Button from '@theme-uzkk/components/Button'
 import Checkbox from '@theme-uzkk/components/Checkbox'
-import { levels, types } from '../data'
-import { shuffle } from '../utils'
+import { types } from '../data'
 import { setSettings, useFallback } from './storage'
 
 export default {
@@ -133,7 +132,7 @@ export default {
       },
     },
     questions () {
-      return this.getQuestions(this.$quiz.range)
+      return this.$quiz.getQuestions()
     },
   },
 
@@ -149,21 +148,9 @@ export default {
         this.$quiz.range = chars.sort().join('')
       }
     },
-    getQuestions (range, level = this.$quiz.level) {
-      return levels[level].filter(t => range.includes(t[3]))
-    },
     nextPart () {
       setSettings(this.$quiz)
-      this.$quiz.currentIndex = 0
-      this.$quiz.questions = shuffle(this.questions)
-        .map(([stem, options, explanation, category, contrib]) => {
-          const [_answer] = options
-          options = shuffle(options)
-          const answer = options.indexOf(_answer)
-          const choice = -1
-          return { stem, options, explanation, category, contrib, answer, choice }
-        })
-      this.$quiz.phase = 'Select'
+      this.$quiz.initTest()
     },
     toAboutPage () {
       setSettings(this.$quiz)
