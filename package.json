@@ -34,9 +34,5 @@
     "eslint-plugin-vue": "^5.2.2",
     "vuepress": "^1.0.0-alpha.47",
     "vuepress-theme-uzkk": "^1.0.0-alpha.30"
-  },
-  "dependencies": {
-    "js-yaml-loader": "^1.0.1",
-    "typescript": "^3.4.1"
   }
 }
